@@ -4,32 +4,53 @@
 
 # Vector Legal
 
-**Юридический AI-департамент — 9 доменов права, 111+ навыков, 8 агентов мониторинга**
+**Юридический AI-департамент для Hermes Agent — российское право на базе
+скелета Claude-for-Legal.**
 
 [![Hermes Agent](https://img.shields.io/badge/Hermes-Agent-blue.svg)](https://github.com/NousResearch/hermes-agent)
-[![Domains: 9](https://img.shields.io/badge/Domains-9-green.svg)](#домены-права)
-[![Skills: 111+](https://img.shields.io/badge/Skills-111%2B-orange.svg)](https://github.com/anthropics/claude-for-legal)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-yellow.svg)](LICENSE)
 
 </div>
 
 ---
 
-Юридический AI-департамент на базе Claude-for-Legal (Anthropic). 9 доменов права, 111+ навыков, MCP-коннекторы к реальным системам (Ironclad, DocuSign, iManage, Everlaw, CourtListener).
+Юридический AI-департамент: домен-за-доменом адаптируется из
+[Claude-for-Legal](https://github.com/anthropics/claude-for-legal) (Anthropic,
+151 навык, 12 плагинов) под **российское право** (ГК РФ, 152-ФЗ, ТК, АПК,
+КоАП) и Hermes Agent.
 
-## Домены права
+Статус всех доменов: [domains-status.md](domains-status.md).
 
-| Домен | Навыков | Что делает |
-|-------|---------|-----------|
-| **commercial-legal** | 12 | Коммерческие договоры, закупки, due diligence, deal debrief |
-| **corporate-legal** | 13 | M&A, корпоративные сделки, board resolutions, dataroom |
-| **employment-legal** | 20 | Трудовые договоры, споры, политики, leave tracking |
-| **litigation-legal** | 19 | Иски, претензии, e-discovery, CourtListener, docket watch |
-| **privacy-legal** | 9 | GDPR, обработка данных, утечки, DPIA |
-| **regulatory-legal** | 9 | Compliance, расследования, reg-change monitoring |
-| **ai-governance-legal** | 10 | EU AI Act, оценка рисков ИИ-систем |
-| **ip-legal** | 12 | Патенты, товарные знаки, лицензирование, renewal watch |
-| **product-legal** | 7 | Terms of Service, EULA, privacy policy, launch review |
+## Готово: commercial-legal (пилот, 15 навыков)
+
+`commercial-legal/` — полный домен: practice profile + cold-start interview +
+12 workflow-навыков. Ревизия договоров против playbook компании, NDA-триаж
+GREEN/YELLOW/RED, SaaS-подписки, реестр продлений, эскалации, протоколы
+разногласий. Быстрый старт — [commercial-legal/README.md](commercial-legal/README.md).
+
+Ключевая механика (перенесена из CFL): договор разбирается против **playbook
+вашей команды**, извлечённого из ваших же подписанных договоров через
+cold-start interview — не против абстрактного «рыночного стандарта». До
+настройки навыки работают в provisional mode с метками `[PROVISIONAL]`.
+
+**Все выходные данные — черновики для проверки юристом.** Не юридическая
+консультация. Источники указываются явно, provenance-теги обязательны.
+
+## Домены (roadmap)
+
+Полная таблица статусов и план: [domains-status.md](domains-status.md).
+
+| Домен | Статус | Замена США → РФ |
+|-------|--------|-----------------|
+| **commercial-legal** | ✅ готов (15 навыков) | договоры поставки/услуг, ГК, 152-ФЗ, протоколы разногласий |
+| privacy-legal | next | 152-ФЗ вместо GDPR, оценка воздействия по модельным условиям РКН |
+| corporate-legal | план | ФЗ об ООО/АО, entity compliance ФНС/ЦБ |
+| employment-legal | план | ТК РФ, увольнения по ст. 81, ГПХ-vs-трудовой |
+| litigation-legal | план | АПК/ГПК, kad.arbitr.ru вместо CourtListener |
+| ai-governance-legal | план | ЭПР ИИ, ГОЗ-ограничения, EU AI Act для экспорта |
+| regulatory-legal | план | pravo.gov.ru монитор, 44-ФЗ/223-ФЗ |
+| ip-legal | план | Роспатент/ФИПС, ГК ч. 4 |
+| product-legal | план | оферта, ФЗ-38 «О рекламе», ЗоЗПП |
 
 ## Агенты мониторинга
 
