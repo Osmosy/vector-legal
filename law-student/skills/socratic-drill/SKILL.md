@@ -37,6 +37,18 @@ argument-hint: "[предмет или тема]"
 суммы, «мой арендодатель/начальник/родственник/друг», «мне пришла
 претензия/повестка/уведомление», сроки в днях. Любой из них — триггер.
 
+
+---
+
+## Shared guardrails (канон — practice profile)
+
+**Reviewer note / decision tree / Destination check / Provenance /
+No-silent-supplement / Currency trigger / Large input** — см.
+practice profile (`~/.hermes/legal/<domain>/CLAUDE.md` → `## Shared
+guardrails`, `## Outputs`). Блоки канонизируются там; если текст навыка
+расходится с профилем — профиль контролирует.
+
+
 ## Purpose
 
 Право не учат чтением. Право учат, ошибаясь в нём, замечая ошибку и чиня её.

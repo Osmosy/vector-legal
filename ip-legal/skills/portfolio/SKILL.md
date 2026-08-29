@@ -17,6 +17,18 @@ argument-hint: '[list | initial | report | add | update | audit]'
    реестр — если есть внешняя система, указать первоисточник)
 2. Выполнить нужный режим ниже
 
+
+---
+
+## Shared guardrails (канон — practice profile)
+
+**Reviewer note / decision tree / Destination check / Provenance /
+No-silent-supplement / Currency trigger / Large input** — см.
+practice profile (`~/.hermes/legal/<domain>/CLAUDE.md` → `## Shared
+guardrails`, `## Outputs`). Блоки канонизируются там; если текст навыка
+расходится с профилем — профиль контролирует.
+
+
 ## Important: deadline reference caveat
 
 Дедлайны в реестре — **референсные, считанные из правил** (ГК ст.

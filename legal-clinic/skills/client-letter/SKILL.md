@@ -43,6 +43,18 @@ client-letter doc-request
 **Scope: только рутина.** Содержательный совет, плохие новости, стратегия —
 это `status client` или разговор, а не шаблонное письмо.
 
+
+---
+
+## Shared guardrails (канон — practice profile)
+
+**Reviewer note / decision tree / Destination check / Provenance /
+No-silent-supplement / Currency trigger / Large input** — см.
+practice profile (`~/.hermes/legal/<domain>/CLAUDE.md` → `## Shared
+guardrails`, `## Outputs`). Блоки канонизируются там; если текст навыка
+расходится с профилем — профиль контролирует.
+
+
 ## Принцип простого языка — обязательный для этого навыка
 
 Клиенты клиники — люди **без юридического образования**. Каждое письмо

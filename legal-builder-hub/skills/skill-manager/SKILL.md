@@ -23,6 +23,18 @@ argument-hint: '[имя навыка + действие: uninstall | disable | r
 необратимое удаление**, где это возможно. Файлы навыка переживают uninstall
 в архиве; полноценное удаление — только на явном отдельном запросе.
 
+
+---
+
+## Shared guardrails (канон — practice profile)
+
+**Reviewer note / decision tree / Destination check / Provenance /
+No-silent-supplement / Currency trigger / Large input** — см.
+practice profile (`~/.hermes/legal/<domain>/CLAUDE.md` → `## Shared
+guardrails`, `## Outputs`). Блоки канонизируются там; если текст навыка
+расходится с профилем — профиль контролирует.
+
+
 ## На чём этот навык может действовать
 
 Только community-навыки, установленные через этот хаб. Правило

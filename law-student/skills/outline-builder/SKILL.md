@@ -25,6 +25,18 @@ argument-hint: "[предмет, или укажи на конспекты ле�
 — конспект, которого не будет у тебя на экзамене. Навык помогает строить —
 не строит за тебя.
 
+
+---
+
+## Shared guardrails (канон — practice profile)
+
+**Reviewer note / decision tree / Destination check / Provenance /
+No-silent-supplement / Currency trigger / Large input** — см.
+practice profile (`~/.hermes/legal/<domain>/CLAUDE.md` → `## Shared
+guardrails`, `## Outputs`). Блоки канонизируются там; если текст навыка
+расходится с профилем — профиль контролирует.
+
+
 ## Правило «не писать за меня» (жёсткое)
 
 Это навык learning mode. Другие инструменты охотно сгенерируют полный

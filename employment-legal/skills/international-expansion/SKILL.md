@@ -15,6 +15,18 @@ user-invocable: false
 
 По practice profile.
 
+
+---
+
+## Shared guardrails (канон — practice profile)
+
+**Reviewer note / decision tree / Destination check / Provenance /
+No-silent-supplement / Currency trigger / Large input** — см.
+practice profile (`~/.hermes/legal/<domain>/CLAUDE.md` → `## Shared
+guardrails`, `## Outputs`). Блоки канонизируются там; если текст навыка
+расходится с профилем — профиль контролирует.
+
+
 ## Право РФ: статусы иностранных работников (ФЗ-115 `[model knowledge — verify]`, реквизиты статей проверить)
 
 | Статус | Кто | Ключевые условия найма |

@@ -28,6 +28,18 @@ argument-hint: '[--all | --slug=foo | --no-email]'
 налоговая нагрузка. Контент per matter стабилен: статус, решения, бюджет/счёт.
 Аудитория стабилена: ведущий юрист/партнёр. Тон стабилен: per house style.
 
+
+---
+
+## Shared guardrails (канон — practice profile)
+
+**Reviewer note / decision tree / Destination check / Provenance /
+No-silent-supplement / Currency trigger / Large input** — см.
+practice profile (`~/.hermes/legal/<domain>/CLAUDE.md` → `## Shared
+guardrails`, `## Outputs`). Блоки канонизируются там; если текст навыка
+расходится с профилем — профиль контролирует.
+
+
 ## Формат выхода
 
 Header — по `## Выходные документы` practice profile (адвокатская тайна

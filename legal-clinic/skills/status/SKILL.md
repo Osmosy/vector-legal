@@ -45,6 +45,18 @@ status court
 одни факты — совершенно разные документы. Навык берёт материалы дела и
 выдаёт правильное резюме правильному читателю.
 
+
+---
+
+## Shared guardrails (канон — practice profile)
+
+**Reviewer note / decision tree / Destination check / Provenance /
+No-silent-supplement / Currency trigger / Large input** — см.
+practice profile (`~/.hermes/legal/<domain>/CLAUDE.md` → `## Shared
+guardrails`, `## Outputs`). Блоки канонизируются там; если текст навыка
+расходится с профилем — профиль контролирует.
+
+
 ## Load context
 
 `~/.hermes/legal/legal-clinic/CLAUDE.md` → супервизорская модель,

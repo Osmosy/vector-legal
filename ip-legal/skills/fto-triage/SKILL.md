@@ -16,6 +16,18 @@ argument-hint: '<продукт/технология> [патент №]'
 2. Выполнить скрин ниже; выход — FTO first-pass memo
 3. Non-lawyer gate (см. внизу)
 
+
+---
+
+## Shared guardrails (канон — practice profile)
+
+**Reviewer note / decision tree / Destination check / Provenance /
+No-silent-supplement / Currency trigger / Large input** — см.
+practice profile (`~/.hermes/legal/<domain>/CLAUDE.md` → `## Shared
+guardrails`, `## Outputs`). Блоки канонизируются там; если текст навыка
+расходится с профилем — профиль контролирует.
+
+
 ## ЭТО НЕ FREEDOM-TO-OPERATE OPINION
 
 Полное FTO — это поиск по всем юрисдикциям всех живых патентов,

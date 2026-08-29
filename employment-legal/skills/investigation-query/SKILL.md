@@ -33,6 +33,18 @@ argument-hint: '[slug расследования] [вопрос]'
    `[model knowledge — verify]`; взыскание — не позднее 1 мес. со дня
    обнаружения; процедура взыскания — акт → требование → приказ.
 
+
+---
+
+## Shared guardrails (канон — practice profile)
+
+**Reviewer note / decision tree / Destination check / Provenance /
+No-silent-supplement / Currency trigger / Large input** — см.
+practice profile (`~/.hermes/legal/<domain>/CLAUDE.md` → `## Shared
+guardrails`, `## Outputs`). Блоки канонизируются там; если текст навыка
+расходится с профилем — профиль контролирует.
+
+
 ## Примеры
 
 - «Что говорил работник про 12 числа?» → цитаты каждого опроса по этой дате.

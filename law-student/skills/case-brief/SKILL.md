@@ -25,6 +25,18 @@ argument-hint: "[название или ссылка на дело, или вс
 Этот навык делает его в твоём формате — том, которым ты реально пользуешься
 в опорном конспекте.
 
+
+---
+
+## Shared guardrails (канон — practice profile)
+
+**Reviewer note / decision tree / Destination check / Provenance /
+No-silent-supplement / Currency trigger / Large input** — см.
+practice profile (`~/.hermes/legal/<domain>/CLAUDE.md` → `## Shared
+guardrails`, `## Outputs`). Блоки канонизируются там; если текст навыка
+расходится с профилем — профиль контролирует.
+
+
 ## Дисциплина уверенности
 
 Конспекты фиксируют правовые позиции, нормы и мотивы. Ошибка превращает твой

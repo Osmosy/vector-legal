@@ -24,6 +24,18 @@ argument-hint: '[--apply для обновления всех, иначе тол
 Community-навыки улучшаются. Этот навык замечает, когда, показывает, что
 изменилось, и применяет обновления только с вашим явным подтверждением.
 
+
+---
+
+## Shared guardrails (канон — practice profile)
+
+**Reviewer note / decision tree / Destination check / Provenance /
+No-silent-supplement / Currency trigger / Large input** — см.
+practice profile (`~/.hermes/legal/<domain>/CLAUDE.md` → `## Shared
+guardrails`, `## Outputs`). Блоки канонизируются там; если текст навыка
+расходится с профилем — профиль контролирует.
+
+
 ## Trust-постура
 
 Установленные навыки — код, работающий внутри вашей привилегированной

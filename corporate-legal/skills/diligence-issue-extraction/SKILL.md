@@ -29,6 +29,18 @@ argument-hint: '[путь к папке dataroom или названию кат�
 
 ---
 
+
+---
+
+## Shared guardrails (канон — practice profile)
+
+**Reviewer note / decision tree / Destination check / Provenance /
+No-silent-supplement / Currency trigger / Large input** — см.
+practice profile (`~/.hermes/legal/<domain>/CLAUDE.md` → `## Shared
+guardrails`, `## Outputs`). Блоки канонизируются там; если текст навыка
+расходится с профилем — профиль контролирует.
+
+
 ## Purpose
 
 В dataroom 2000 документов. Где-то в них — 30, которые важны для сделки.

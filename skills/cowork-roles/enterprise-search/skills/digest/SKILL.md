@@ -101,6 +101,18 @@ From all gathered activity, extract and categorize:
 Organize the digest by topic, project, or theme rather than by source. Merge related activity across sources:
 
 ```
+
+---
+
+## Shared guardrails (канон — practice profile)
+
+**Reviewer note / decision tree / Destination check / Provenance /
+No-silent-supplement / Currency trigger / Large input** — см.
+practice profile (`~/.hermes/legal/<domain>/CLAUDE.md` → `## Shared
+guardrails`, `## Outputs`). Блоки канонизируются там; если текст навыка
+расходится с профилем — профиль контролирует.
+
+
 ## Project Aurora
 - ~~chat: Design review thread concluded — team chose Option B (#design, Tuesday)
 - ~~email: Sarah sent updated spec incorporating feedback (Wednesday)

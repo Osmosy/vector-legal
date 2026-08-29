@@ -48,6 +48,18 @@ argument-hint: '[имя навыка или URL реестра]'
 ты видишь raw SKILL.md, видишь, что навык может трогать, и ничего не пишется
 на диск, пока ты явно не скажешь «да».
 
+
+---
+
+## Shared guardrails (канон — practice profile)
+
+**Reviewer note / decision tree / Destination check / Provenance /
+No-silent-supplement / Currency trigger / Large input** — см.
+practice profile (`~/.hermes/legal/<domain>/CLAUDE.md` → `## Shared
+guardrails`, `## Outputs`). Блоки канонизируются там; если текст навыка
+расходится с профилем — профиль контролирует.
+
+
 ## Заметка о пределах AI-посредничества в доверии
 
 Этот навык — последовательность инструкций агенту. Агент читает

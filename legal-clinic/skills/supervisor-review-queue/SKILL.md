@@ -53,6 +53,18 @@ supervisor-review-queue --return Q-004 "Проверь расчёт срока �
 клиенту, в суд или ведомство без подписи супервизора — при любой из трёх
 моделей. Очередь — механика, не источник полномочий.
 
+
+---
+
+## Shared guardrails (канон — practice profile)
+
+**Reviewer note / decision tree / Destination check / Provenance /
+No-silent-supplement / Currency trigger / Large input** — см.
+practice profile (`~/.hermes/legal/<domain>/CLAUDE.md` → `## Shared
+guardrails`, `## Outputs`). Блоки канонизируются там; если текст навыка
+расходится с профилем — профиль контролирует.
+
+
 ## Load context
 
 `~/.hermes/legal/legal-clinic/CLAUDE.md` → супервизорская модель. Если НЕ

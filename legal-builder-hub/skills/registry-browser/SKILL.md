@@ -23,6 +23,18 @@ argument-hint: '[поисковый запрос]'
 
 Найти навыки по всем watched-реестрам. Поиск, превью, решение.
 
+
+---
+
+## Shared guardrails (канон — practice profile)
+
+**Reviewer note / decision tree / Destination check / Provenance /
+No-silent-supplement / Currency trigger / Large input** — см.
+practice profile (`~/.hermes/legal/<domain>/CLAUDE.md` → `## Shared
+guardrails`, `## Outputs`). Блоки канонизируются там; если текст навыка
+расходится с профилем — профиль контролирует.
+
+
 ## Загрузка контекста
 
 `~/.hermes/legal/legal-builder-hub/CLAUDE.md` → список watched-реестров.

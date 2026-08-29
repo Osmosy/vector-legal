@@ -31,6 +31,18 @@ argument-hint: '[описание проблемы или ссылка на memo
 
 5. **Не отправлять.** Драфт, показ, юрист отправляет сам.
 
+
+---
+
+## Shared guardrails (канон — practice profile)
+
+**Reviewer note / decision tree / Destination check / Provenance /
+No-silent-supplement / Currency trigger / Large input** — см.
+practice profile (`~/.hermes/legal/<domain>/CLAUDE.md` → `## Shared
+guardrails`, `## Outputs`). Блоки канонизируются там; если текст навыка
+расходится с профилем — профиль контролирует.
+
+
 ## Примеры
 
 ```

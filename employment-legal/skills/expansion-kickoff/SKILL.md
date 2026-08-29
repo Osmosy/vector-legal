@@ -38,6 +38,18 @@ argument-hint: '[гражданство кандидата / страна най
    критические дедлайны (уведомления МВД — 3 раб. дня; ВКС-порог
    зарплаты — уточнить на дату).
 
+
+---
+
+## Shared guardrails (канон — practice profile)
+
+**Reviewer note / decision tree / Destination check / Provenance /
+No-silent-supplement / Currency trigger / Large input** — см.
+practice profile (`~/.hermes/legal/<domain>/CLAUDE.md` → `## Shared
+guardrails`, `## Outputs`). Блоки канонизируются там; если текст навыка
+расходится с профилем — профиль контролирует.
+
+
 ## Важно в intake
 
 - **Никогда не допускать к работе до разрешений/патента:** работа без

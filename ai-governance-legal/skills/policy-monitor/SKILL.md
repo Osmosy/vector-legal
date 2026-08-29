@@ -21,6 +21,18 @@ argument-hint: '[sweep | <запрос/практика>]'
    систем, реестра use-case'ов и текущей регуляторики
 2. **Direct query** — «разрешает ли наша политика эту [практику]?»
 
+
+---
+
+## Shared guardrails (канон — practice profile)
+
+**Reviewer note / decision tree / Destination check / Provenance /
+No-silent-supplement / Currency trigger / Large input** — см.
+practice profile (`~/.hermes/legal/<domain>/CLAUDE.md` → `## Shared
+guardrails`, `## Outputs`). Блоки канонизируются там; если текст навыка
+расходится с профилем — профиль контролирует.
+
+
 ## Загрузить текущее состояние
 
 1. `~/.hermes/legal/ai-governance-legal/CLAUDE.md` — профиль (реестр

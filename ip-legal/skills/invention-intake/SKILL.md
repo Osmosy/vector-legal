@@ -18,6 +18,18 @@ argument-hint: '<описание изобретения>'
 2. Intake → скрин → memo → вердикт-рекомендация
 3. Non-lawyer gate
 
+
+---
+
+## Shared guardrails (канон — practice profile)
+
+**Reviewer note / decision tree / Destination check / Provenance /
+No-silent-supplement / Currency trigger / Large input** — см.
+practice profile (`~/.hermes/legal/<domain>/CLAUDE.md` → `## Shared
+guardrails`, `## Outputs`). Блоки канонизируются там; если текст навыка
+расходится с профилем — профиль контролирует.
+
+
 ## ЭТО СКРИН, НЕ PATENTABILITY OPINION
 
 Полный анализ патентоспособности — поверенный с поиском по реестрам

@@ -37,6 +37,18 @@ argument-hint: '[slug расследования] [аудитория: hr / lead
    («свидетель-1») в версии для руководства; ФИО только там, где
    юридически необходимо (приказ о взыскании).
 
+
+---
+
+## Shared guardrails (канон — practice profile)
+
+**Reviewer note / decision tree / Destination check / Provenance /
+No-silent-supplement / Currency trigger / Large input** — см.
+practice profile (`~/.hermes/legal/<domain>/CLAUDE.md` → `## Shared
+guardrails`, `## Outputs`). Блоки канонизируются там; если текст навыка
+расходится с профилем — профиль контролирует.
+
+
 ## Что ломается чаще всего
 
 - Руководство просит «поименовать всех» в версии для совета — отказ или

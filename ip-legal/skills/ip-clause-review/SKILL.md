@@ -16,6 +16,18 @@ argument-hint: '<договор> [раздел IP]'
 1. Загрузить профиль; определить сторону (наша бумага / их)
 2. Выполнить шаги ниже; выход — memo с redline'ами
 
+
+---
+
+## Shared guardrails (канон — practice profile)
+
+**Reviewer note / decision tree / Destination check / Provenance /
+No-silent-supplement / Currency trigger / Large input** — см.
+practice profile (`~/.hermes/legal/<domain>/CLAUDE.md` → `## Shared
+guardrails`, `## Outputs`). Блоки канонизируются там; если текст навыка
+расходится с профилем — профиль контролирует.
+
+
 ## Purpose
 
 IP-пункты в договорах разработки, NDA, фриланс-договорах, SaaS-контрактах:

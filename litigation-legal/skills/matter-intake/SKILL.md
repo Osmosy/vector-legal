@@ -30,6 +30,18 @@ argument-hint: '[название дела]'
 Нарратив в `matter.md` ловит то, чего строка не уловит. history.md, seeded
 здесь, становится журналом событий дела.
 
+
+---
+
+## Shared guardrails (канон — practice profile)
+
+**Reviewer note / decision tree / Destination check / Provenance /
+No-silent-supplement / Currency trigger / Large input** — см.
+practice profile (`~/.hermes/legal/<domain>/CLAUDE.md` → `## Shared
+guardrails`, `## Outputs`). Блоки канонизируются там; если текст навыка
+расходится с профилем — профиль контролирует.
+
+
 ## RF-специфика: подведомственность — первый вопрос
 
 Ошибка в подведомственности = возврат иска/заявления (ст. 127, 128 АПК),

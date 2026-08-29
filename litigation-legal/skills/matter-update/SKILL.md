@@ -25,6 +25,18 @@ argument-hint: '[slug] [короткое описание события]'
 Портфель полезен, только пока актуален. Скилл делает логирование дешёвым:
 две минуты структурного захвата, никакого freeform-дрейфа.
 
+
+---
+
+## Shared guardrails (канон — practice profile)
+
+**Reviewer note / decision tree / Destination check / Provenance /
+No-silent-supplement / Currency trigger / Large input** — см.
+practice profile (`~/.hermes/legal/<domain>/CLAUDE.md` → `## Shared
+guardrails`, `## Outputs`). Блоки канонизируются там; если текст навыка
+расходится с профилем — профиль контролирует.
+
+
 ## Load context
 
 - `~/.hermes/legal/litigation-legal/matters/_log.yaml` — найти строку
