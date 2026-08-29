@@ -97,7 +97,8 @@ Issue: §8.2 indemnity carveouts
   сумму (см. vendor-agreement-review Step 1 — Dollar-value handling).
 - **Автотриггеры из профиля:** неограниченная ответственность, переуступка IP
   вендору, любые «никогда не принимаем» — эскалация независимо от суммы.
-- **Кросс-доменные 🔴:** если проблема тянет в privacy-legal (152-ФЗ), ip-legal
+- **Кросс-доменные 🔴:** если проблема тянет в privacy-legal (152-ФЗ
+  [pravo.gov.ru]), ip-legal
   (лицензии) или regulatory-legal — сказать, какой плагин нужен как
   second-opinion, и предложить handoff.
 

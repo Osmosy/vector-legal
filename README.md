@@ -76,24 +76,6 @@ git clone https://github.com/Osmosy/vector-legal.git
 
 Статусы, план и принцип адаптации: [domains-status.md](domains-status.md).
 
-## Домены (roadmap)
-
-> Раздел ниже — исторический план; все 9 доменов уже адаптированы (таблица
-> выше). Roadmap дальнейшего (углубление доменов, MCP-коннекторы РФ-систем):
-> [domains-status.md](domains-status.md).
-
-| Домен | Статус | Замена США → РФ |
-|-------|--------|-----------------|
-| **commercial-legal** | ✅ готов (15 навыков) | договоры поставки/услуг, ГК, 152-ФЗ, протоколы разногласий |
-| privacy-legal | next | 152-ФЗ вместо GDPR, оценка воздействия по модельным условиям РКН |
-| corporate-legal | план | ФЗ об ООО/АО, entity compliance ФНС/ЦБ |
-| employment-legal | план | ТК РФ, увольнения по ст. 81, ГПХ-vs-трудовой |
-| litigation-legal | план | АПК/ГПК, kad.arbitr.ru вместо CourtListener |
-| ai-governance-legal | план | ЭПР ИИ, ГОЗ-ограничения, EU AI Act для экспорта |
-| regulatory-legal | план | pravo.gov.ru монитор, 44-ФЗ/223-ФЗ |
-| ip-legal | план | Роспатент/ФИПС, ГК ч. 4 |
-| product-legal | план | оферта, ФЗ-38 «О рекламе», ЗоЗПП |
-
 ## Агенты мониторинга
 
 | Агент | Что отслеживает |

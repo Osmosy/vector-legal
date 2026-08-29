@@ -123,8 +123,16 @@ def mentions_sources(body: str) -> bool:
 
 
 def validate_all() -> int:
-    """Прогнать все SKILL.md; return exit code."""
+    """Прогнать все SKILL.md; return exit code.
+
+    Флаги (совместимо с GitHub Actions):
+      --strict   warnings тоже считаются ошибками (exit 1 при любых findings)
+      --warnings вывести только advisories/warnings, errors молча (для
+                 отдельного report-only job'а в CI)
+    """
     root = pathlib.Path(__file__).parent.parent
+    strict = '--strict' in sys.argv
+    warnings_only = '--warnings' in sys.argv
     all_errors = []
     all_warnings = []
     total = 0
@@ -154,11 +162,26 @@ def validate_all() -> int:
         print(f'    {d}: {n}')
     print(f'  Errors: {len(all_errors)} | Advisories: {len(all_warnings)}')
 
+    if warnings_only:
+        # Report-only job: печатаем только warnings, ошибки уже видит error-job
+        if all_warnings:
+            print('Advisories (report-only, not blocking):')
+            for rel, w in all_warnings:
+                print(f'    [advisory] [{rel}] {w}')
+        else:
+            print('Warnings: none')
+        return 0
+
     if all_errors:
         print('ERRORS by file:')
         for rel, errs in all_errors:
             for i in errs:
                 print(f'    [ERR] [{rel}] {i}')
+        return 1
+    if all_warnings and strict:
+        print('Warnings (STRICT mode → treated as errors):')
+        for rel, w in all_warnings:
+            print(f'    [warning] [{rel}] {w}')
         return 1
     if all_warnings:
         print('Advisories (not blocking):')

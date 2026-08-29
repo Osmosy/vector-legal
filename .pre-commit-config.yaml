@@ -1,0 +1,31 @@
+# Pre-commit hooks для vector-legal
+# Установка:  pip install pre-commit && pre-commit install
+# Запуск:     pre-commit run --all-files
+#
+# Порядок: локальные хуки (без внешних зависимостей) — PII/секреты,
+# валидация SKILL.md, placeholder-гигиена. Внешние хуки не используются,
+# чтобы CI и локальная среда были детерминированы.
+
+repos:
+  - repo: local
+    hooks:
+      - id: pii-scan
+        name: PII / secrets scan
+        entry: bash -c 'grep -RInE "(sk-[A-Za-z0-9]{40,}|gh[pousr]_[A-Za-z0-9]{30,}|AKIA[A-Z0-9]{16}|Bearer[[:space:]]+[A-Za-z0-9]{20,})" --include="*.md" --include="*.yaml" --include="*.yml" --exclude-dir=".git" . && exit 1 || exit 0'
+        language: system
+        files: '\.(md|ya?ml)$'
+        pass_filenames: false
+
+      - id: validate-skills
+        name: Validate SKILL.md (frontmatter + structure)
+        entry: python3 scripts/validate.py
+        language: system
+        files: 'SKILL\.md$'
+        pass_filenames: false
+
+      - id: placeholder-hygiene
+        name: Placeholder hygiene (advisory in SKILL.md)
+        entry: python3 scripts/precommit_placeholder.py
+        language: system
+        files: 'SKILL\.md$'
+        pass_filenames: false

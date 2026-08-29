@@ -18,7 +18,7 @@ description: >
 Перед выдачей проверить, куда пойдёт документ. Внешнему получателю
 (контрагенту, клиенту, широкому каналу) — header work product снимается,
 внутренним бизнес-командам — остаётся `КОНФИДЕНЦИАЛЬНО` (защита — КТ, не
-адвокатская тайна). См. practice profile → Shared guardrails → Destination check.
+адвокатская тайна) [model knowledge — verify]. См. practice profile → Shared guardrails → Destination check.
 
 ## Purpose
 

@@ -15,26 +15,28 @@ jobs:
         with:
           python-version: '3.12'
       - run: pip install pyyaml
-      - name: Validate SKILL.md frontmatter + structure
+      - name: Validate SKILL.md frontmatter + structure (errors fail)
         run: python3 scripts/validate.py
 
-  ru-lint:
+  ru-lint-warnings:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: RU body lint (кириллица ≥ 5%, нет Pitfalls, consequential-gates)
+      - name: RU body lint — advisories (report-only, never fails)
         run: |
-          # ru-lint уже совмещён с validate.py
-          python3 scripts/validate.py
+          # Разделение: errors фейлят в job'е frontmatter (validate.py без флагов),
+          # здесь — только advisory-отчёт для людей. --warnings печатает warnings
+          # и всегда возвращает 0, поэтому job зелёный при любом раскладе.
+          python3 scripts/validate.py --warnings
 
   no-pii:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Scan for PII / secrets
+      - name: Scan for PII / secrets (fail)
         run: |
           # Проверка на утечку секретов / клиентских данных
           if grep -RInE '(sk-[A-Za-z0-9]{40,}|gh[pousr]_[A-Za-z0-9]{30,}|AKIA[A-Z0-9]{16}|Bearer\s+[A-Za-z0-9]{20,})' \
