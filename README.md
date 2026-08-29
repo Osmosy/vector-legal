@@ -56,6 +56,13 @@ Cron-агенты мониторинга (cookbooks/) шипятся с 4-шлю
 | **legal-clinic** | 14 | ФЗ-324, supervisor-gate (ничто клиенту без подписи), plain-language, 152-ФЗ-intake, семестровая отчётность |
 | **legal-builder-hub** | 10 | app-store навыков: skills-qa 740 строк (13 параметров, 4-уровневый verdict no-override), SHA-pinning, injection-scan |
 
+## Руководство пользователя
+
+> Полная инструкция: [USER-GUIDE.md](USER-GUIDE.md). Установка, cold-start
+> интервью, типовые запросы по каждому домену, 5 cron-агентов мониторинга,
+> подключение правовых баз (MCP), работа в команде/firm, security,
+> troubleshooting.
+
 ## Быстрый старт
 
 ```bash
