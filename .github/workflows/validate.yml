@@ -1,0 +1,53 @@
+name: validate
+
+on:
+  pull_request:
+    branches: [master, main]
+  push:
+    branches: [master, main]
+
+jobs:
+  frontmatter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install pyyaml
+      - name: Validate SKILL.md frontmatter + structure
+        run: python scripts/validate.py
+
+  ru-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: RU body lint (кириллица ≥ 5%, нет Pitfalls, consequential-gates)
+        run: |
+          # ru-lint уже совмещён с validate.py
+          python scripts/validate.py
+
+  no-pii:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Scan for PII / secrets
+        run: |
+          # Проверка на утечку секретов / клиентских данных
+          if grep -RInE '(sk-[A-Za-z0-9]{40,}|gh[pousr]_[A-Za-z0-9]{30,}|AKIA[A-Z0-9]{16}|Bearer\s+[A-Za-z0-9]{20,})' \
+              --include='*.md' --include='*.yaml' --include='*.yml' \
+              --exclude-dir='.git' . ; then
+            echo "PII token pattern detected"
+            exit 1
+          fi
+          echo "no secrets patterns"
+
+      - name: Placeholder hygiene (warning only)
+        run: |
+          # PLACEHOLDER в SKILL.md файлов не должно быть (только в CLAUDE.md)
+          if grep -RIn '\[PLACEHOLDER\]' --include='SKILL.md' . ; then
+            echo "warning: [PLACEHOLDER] found in SKILL.md (advisory, moves to CLAUDE.md)"
+          fi
