@@ -1,23 +1,3 @@
----
-name: law-student
-description: >
-  Плагин «Помощник студента-юриста» для Vector Legal: Socratic-тренажёр
-  (задаёт вопросы, не отвечает за студента), конспект судебного акта в формате
-  студента, построение опорного конспекта (outline), флеш-карточки с ящиками
-  Лейтнера, IRAC-практика, подготовка к семинару и к экзамену на статус
-  адвоката (ФЗ-63 гл. 2-3) / магистратуре, прогноз экзамена по прошлым
-  билетам. Адаптация anthropics/claude-for-legal (law-student) под российскую
-  систему юридического образования. Используй при «потренируй меня»,
-  «разбери дело», «составь конспект», «готовлюсь к экзамену на статус».
-version: 1.0.0
-author: Osmosy
-license: Apache-2.0
-metadata:
-  hermes:
-    tags: [legal, education, law-student, russia, vector-legal]
-    related_skills: []
----
-
 # Law Student — Помощник студента-юриста (Vector Legal)
 
 Адаптация [claude-for-legal/law-student](https://github.com/anthropics/claude-for-legal)

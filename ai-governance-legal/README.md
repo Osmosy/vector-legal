@@ -1,22 +1,3 @@
----
-name: ai-governance-legal
-description: >
-  Плагин «AI Governance» для Vector Legal: инвентарь ИИ-систем по ролям
-  (провайдер/деплойер), триаж use-case'ов против red lines, оценка
-  воздействия (AIA), ревизия вендорских ИИ-соглашений, мониторинг
-  ИИ-политики, gap-анализ регуляторики. Адаптация anthropics/claude-for-legal
-  под право РФ (ЭПР ИИ по ФЗ-123 от 24.04.2020, ГОСТ Р 59276-2020, Указ
-  №490, 152-ФЗ, ГОСТ Р ИСО/МЭК 23894) и Hermes Agent. Для экспорта —
-  EU AI Act (ст. 6, Приложение III, GPAI).
-version: 1.0.0
-author: Osmosy
-license: Apache-2.0
-metadata:
-  hermes:
-    tags: [legal, ai-governance, russia, vector-legal, eu-ai-act]
-    related_skills: [privacy-legal]
----
-
 # AI Governance Counsel — управление рисками ИИ (Vector Legal)
 
 Адаптация [claude-for-legal/ai-governance-legal](https://github.com/anthropics/claude-for-legal)

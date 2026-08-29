@@ -1,24 +1,3 @@
----
-name: employment-legal
-description: >
-  Плагин «Трудовое право» для Vector Legal: ревизия найма (трудовой договор,
-  обязательные условия ст. 57 ТК), увольнений по ст. 81 ТК (закрытый перечень
-  оснований, процедурные сроки), ГПХ-vs-трудовой (переквалификация),
-  локальные нормативные акты (ПВТР, положение об оплате, о ПДн), отпуска и
-  больничные (ст. 123 ТК), служебные расследования, оплата труда (МРОТ,
-  сверхурочные ст. 152), приём иностранцев (ФЗ-115, ВКС). Адаптация
-  anthropics/claude-for-legal под ТК РФ и Hermes Agent. Используй при
-  «увольняем сотрудника», «оформить оффер», «проверить ГПХ», «составить
-  ПВТР», «отпуска по графику».
-version: 1.0.0
-author: Osmosy
-license: Apache-2.0
-metadata:
-  hermes:
-    tags: [legal, employment, labor-law, russia, vector-legal]
-    related_skills: [api-tokens-in-chat]
----
-
 # Employment Counsel — Трудовое право (Vector Legal)
 
 Адаптация [claude-for-legal/employment-legal](https://github.com/anthropics/claude-for-legal)

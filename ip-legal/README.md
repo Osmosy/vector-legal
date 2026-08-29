@@ -1,22 +1,3 @@
----
-name: ip-legal
-description: >
-  Плагин «Интеллектуальная собственность» для Vector Legal: clearance
-  товарных знаков (ФИПС открытые реестры), triage нарушений, C&D и
-  takedown, FTO и патенты (заявочная процедура, ПМ), ревизия IP-пунктов
-  договоров, OSS-ревизия (MIT/Apache/BSD, AGPL для SaaS), портфель.
-  Адаптация anthropics/claude-for-legal под право РФ (ГК ч. 4 — ст.
-  1225-1254, СИПН, Роспатент/ФИПС) и Hermes Agent. Экспорт —
-  международные заявки (Мадрид, РСТ).
-version: 1.0.0
-author: Osmosy
-license: Apache-2.0
-metadata:
-  hermes:
-    tags: [legal, ip, russia, vector-legal, trademarks, patents, oss]
-    related_skills: [commercial-legal]
----
-
 # IP Counsel — интеллектуальная собственность (Vector Legal)
 
 Адаптация [claude-for-legal/ip-legal](https://github.com/anthropics/claude-for-legal)

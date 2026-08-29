@@ -1,23 +1,3 @@
----
-name: litigation-legal
-description: >
-  Плагин «Литигация и споры» для Vector Legal: картотека дел (intake → update →
-  briefing → close), досудебный порядок (претензии — ч. 5 ст. 4 АПК), хронология
-  событий как доказательственная база, таблица требований, подготовка
-  процессуальных документов (исковое — ст. 125 АПК, отзыв — ст. 131,
-  апелляция/кассация), судебные запросы ст. 66 АПК и 93.1 НК. Адаптация
-  anthropics/claude-for-legal под АПК/ГПК РФ, ГК РФ и Hermes Agent. Используй
-  при «новое дело», «претензия», «исковое заявление», «хронология по делу»,
-  «судебный запрос на нас», «статус портфеля дел».
-version: 1.0.0
-author: Osmosy
-license: Apache-2.0
-metadata:
-  hermes:
-    tags: [legal, litigation, disputes, arbitration, russia, vector-legal]
-    related_skills: [api-tokens-in-chat]
----
-
 # Litigation Counsel — Споры и судебная работа (Vector Legal)
 
 Адаптация [claude-for-legal/litigation-legal](https://github.com/anthropics/claude-for-legal)

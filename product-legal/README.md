@@ -1,23 +1,3 @@
----
-name: product-legal
-description: >
-  Плагин «Продуктовый юрист» для Vector Legal: launch review по 9 категориям
-  против risk-калибровки компании, ревизия маркетинговых заявлений (ФЗ-38,
-  маркировка рекламы ЕРИР), оценка риска новой фичи (152-ФЗ, ФЗ-161, ЭПР,
-  ЗоИС), быстрая триаж-ответка «это проблема?», политика обработки ПДн
-  (152-ФЗ + приказ РКН №179), оферта/ToS (ст. 437, 428 ГК, ЗоЗПП). Адаптация
-  anthropics/claude-for-legal product-legal под право РФ и Hermes Agent.
-  Используй при «проверь запуск», «можно ли так рекламировать», «оцени риск
-  фичи», «это проблема?», «нужна политика ПДн», «составь оферту».
-version: 1.0.0
-author: Osmosy
-license: Apache-2.0
-metadata:
-  hermes:
-    tags: [legal, product, marketing, launch, russia, vector-legal]
-    related_skills: [commercial-legal, privacy-legal, ai-governance-legal]
----
-
 # Product Counsel — Продуктовый юрист (Vector Legal)
 
 Адаптация [claude-for-legal/product-legal](https://github.com/anthropics/claude-for-legal)

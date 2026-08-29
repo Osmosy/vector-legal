@@ -1,23 +1,3 @@
----
-name: regulatory-legal
-description: >
-  Плагин «Регуляторика» для Vector Legal: мониторинг НПА и регуляторов
-  (pravo.gov.ru, ЦБ, Минцифры, РКН, ФСТЭК, Роспотребнадзор, ФАС),
-  diff новых требований против политик, surfacing пробелов, редлайн
-  политик, трекинг комментариев на проекты НПА (regulation.gov.ru).
-  Адаптация anthropics/claude-for-legal под право РФ (Регуляторная
-  гильотина — ПП №1128, 44-ФЗ/223-ФЗ, отраслевые регуляторы) и Hermes.
-  Используй при «что нового по нашему регулятору», «проверь изменения
-  в НПА», «подготовь дайджест», «что требует новый приказ».
-version: 1.0.0
-author: Osmosy
-license: Apache-2.0
-metadata:
-  hermes:
-    tags: [legal, regulatory, russia, vector-legal, pravo-gov-ru]
-    related_skills: [ai-governance-legal, commercial-legal]
----
-
 # Regulatory Counsel — регуляторный мониторинг (Vector Legal)
 
 Адаптация [claude-for-legal/regulatory-legal](https://github.com/anthropics/claude-for-legal)

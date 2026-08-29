@@ -1,0 +1,67 @@
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*~
+
+# User-specific practice profiles (заполненные cold-start'ом — НИКОГДА в репо)
+*.local.md
+CLAUDE.md.local
+matters/
+outputs/
+out/
+logs/
+*.log
+
+# Credentials и токены (CONNECTORS-ru-mcp.md: GARANT_TOKEN, MCP_SUDACT_TOKEN и др.)
+.env
+.env.*
+*.pem
+*.key
+secrets.yaml
+credentials.yaml
+
+# MCP caches
+.mcp-cache/
+registry-cache.json
+ai-systems.yaml
+renewal-register.yaml
+verification-log.md
+deviation-log.md
+gap-tracker.yaml
+comment-tracker.yaml
+# (эти — state-файлы, генерируются навыками в ~/.hermes/legal/; если
+#  храните в репо для бэкапа — используйте отдельную ветку data-backup)
+
+# Python / build artifacts
+__pycache__/
+*.pyc
+.venv/
+venv/
+node_modules/
+dist/
+build/
+
+# Документы дел (VDR, договоры клиентов, PII)
+*.pdf
+*.docx
+*.doc
+!sample-contract.pdf
+client-docs/
+vdr/
+dataroom/
+
+# Excel/CSV outputs (генерируются дашбордом и claim-chart)
+*.xlsx
+outputs/
+e2e-artifacts/
+
+# Временные
+*.tmp
+*.swp
+backup/
+_archive/

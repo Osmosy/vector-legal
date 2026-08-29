@@ -1,22 +1,3 @@
----
-name: privacy-legal
-description: >
-  Плагин «Персональные данные» для Vector Legal: ревизия поручений на
-  обработку ПД (ст. 6 152-ФЗ), ответы на запросы субъектов (ст. 14, 20, 21),
-  оценка вреда (ст. 18.1 152-ФЗ, уровни защищённости ФСТЭК №21/ФСБ №378),
-  триаж обработок ПД, дрейф политики, гэп-анализ изменений 152-ФЗ и
-  КоАП ст. 13.11. Адаптация anthropics/claude-for-legal под российское
-  право. Используй при «проверь поручение на обработку», «запрос субъекта
-  пришёл», «нужна ли оценка вреда», «уведомить РКН», «трансграничная передача».
-version: 1.0.0
-author: Osmosy
-license: Apache-2.0
-metadata:
-  hermes:
-    tags: [legal, privacy, personal-data, russia, vector-legal, 152-fz]
-    related_skills: [api-tokens-in-chat]
----
-
 # Privacy Counsel — Персональные данные (Vector Legal)
 
 Адаптация [claude-for-legal/privacy-legal](https://github.com/anthropics/claude-for-legal)

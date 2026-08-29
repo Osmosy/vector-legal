@@ -1,24 +1,3 @@
----
-name: legal-builder-hub
-description: >
-  Плагин «App store юридических навыков» для Vector Legal: обзор GitHub-
-  реестров community-навыков (включая наш vector-legal и lpm-skills),
-  установка с тремя уровнями доверия (лицензия → source scan → подтверждение
-  пользователя), скан prompt-injection при установке и при каждом
-  обновлении, QA по Legal Skill Design Framework (13 параметров, 3
-  юридических failure mode), обновления с diff-показом и confirm-гейтом,
-  безопасное отключение (архивирование, не удаление). Используй при
-  «найди/установи/обнови/проверь навык», «что установить», «доверять ли
-  этому скиллу».
-version: 1.0.0
-author: Osmosy
-license: Apache-2.0
-metadata:
-  hermes:
-    tags: [legal, skills, app-store, security, prompt-injection, qf, vector-legal]
-    related_skills: [api-tokens-in-chat, hermes-skills-system]
----
-
 # Legal Builder Hub — app store юридических навыков (Vector Legal)
 
 Адаптация [claude-for-legal/legal-builder-hub](https://github.com/anthropics/claude-for-legal)

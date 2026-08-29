@@ -1,21 +1,3 @@
----
-name: commercial-legal
-description: >
-  Плагин «Коммерческие договоры» для Vector Legal: ревизия входящих договоров
-  против playbook компании (не рыночного), NDA-триаж GREEN/YELLOW/RED,
-  SaaS/MSA-ревизия, трекинг допсоглашений и renewal-дат, эскалации и саммари
-  для бизнеса. Адаптация anthropics/claude-for-legal под российское право
-  (ГК РФ, 152-ФЗ, АПК). Используй при «проверь договор», «ревизия MSA»,
-  «это NDA ок?», «когда продление», «подготовь redline».
-version: 1.0.0
-author: Osmosy
-license: Apache-2.0
-metadata:
-  hermes:
-    tags: [legal, commercial, contracts, russia, vector-legal]
-    related_skills: [api-tokens-in-chat]
----
-
 # Commercial Counsel — Коммерческие договоры (Vector Legal)
 
 Адаптация [claude-for-legal/commercial-legal](https://github.com/anthropics/claude-for-legal)
