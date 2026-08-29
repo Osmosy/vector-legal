@@ -140,7 +140,9 @@ End every incident response with:
 5. Сохранять только в ~/.git-credentials (chmod 600) или через gh auth login
 ```
 
-## Common Pitfalls
+## Verified failure-mode procedures
+
+Each entry below is a verified fix/procedure for a real failure mode — apply it directly when the symptom appears.
 
 1. **Proceeding silently.** User pastes token → agent uses it without warning. Worst case: token leaks to chat logs, tool I/O, browser history if any web preview happens.
 
