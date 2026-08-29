@@ -4,41 +4,66 @@
 
 # Vector Legal
 
-**Юридический AI-департамент для Hermes Agent — российское право на базе
-скелета Claude-for-Legal.**
+**Юридический AI-департамент для Hermes Agent — 9 доменов российского права
+на базе скелета Claude-for-Legal (Anthropic).**
 
 [![Hermes Agent](https://img.shields.io/badge/Hermes-Agent-blue.svg)](https://github.com/NousResearch/hermes-agent)
+[![Domains: 9](https://img.shields.io/badge/Domains-9-green.svg)](#домены)
+[![Skills: 128](https://img.shields.io/badge/Skills-128-blue.svg)]()
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-yellow.svg)](LICENSE)
 
 </div>
 
 ---
 
-Юридический AI-департамент: домен-за-доменом адаптируется из
+Юридический AI-департамент: все 9 доменов
 [Claude-for-Legal](https://github.com/anthropics/claude-for-legal) (Anthropic,
-151 навык, 12 плагинов) под **российское право** (ГК РФ, 152-ФЗ, ТК, АПК,
-КоАП) и Hermes Agent.
+151 навык) адаптированы под **российское право** (ГК РФ, 152-ФЗ, ТК РФ, АПК,
+КоАП, ФЗ-115, ФЗ-135, ФЗ-38) и Hermes Agent, с расширениями для российской
+практики.
 
-Статус всех доменов: [domains-status.md](domains-status.md).
-
-## Готово: commercial-legal (пилот, 15 навыков)
-
-`commercial-legal/` — полный домен: practice profile + cold-start interview +
-12 workflow-навыков. Ревизия договоров против playbook компании, NDA-триаж
-GREEN/YELLOW/RED, SaaS-подписки, реестр продлений, эскалации, протоколы
-разногласий. Быстрый старт — [commercial-legal/README.md](commercial-legal/README.md).
-
-Ключевая механика (перенесена из CFL): договор разбирается против **playbook
-вашей команды**, извлечённого из ваших же подписанных договоров через
-cold-start interview — не против абстрактного «рыночного стандарта». До
-настройки навыки работают в provisional mode с метками `[PROVISIONAL]`.
+**Архитектура, перенесённая из CFL:** каждый домен работает через **practice
+profile** — файл практики, который пишет cold-start interview (агент
+интервьюирует юриста, извлекает playbook из реальных подписанных договоров).
+До настройки навыки работают в provisional mode с метками `[PROVISIONAL]`.
+Provenance-теги обязательны: `[kad.arbitr.ru]` / `[pravo.gov.ru]` /
+`[КонсультантПлюс]` / `[user provided]` / `[model knowledge — verify]`.
 
 **Все выходные данные — черновики для проверки юристом.** Не юридическая
-консультация. Источники указываются явно, provenance-теги обязательны.
+консультация, не позиция Anthropic или Osmosy.
+
+## Домены (все адаптированы)
+
+| Домен | Навыков | RF-ядро |
+|-------|---------|---------|
+| **commercial-legal** | 13+check | ГК (15/330/401/425/452), протоколы разногласий, 152-ФЗ в закупках |
+| **privacy-legal** | 9 | 152-ФЗ: поручения ст. 6, запросы субъектов 30 дней, оценка вреда ст. 18.1, ТИПЗ ФСТЭК №21, трансграничка ст. 12+№931, утечки 24/72ч, КоАП 13.11 |
+| **corporate-legal** | 13 | ФЗ-14/208: крупные сделки, протоколы ст. 181.2 ГК, нотариат долей, ЕГРЮЛ-комплаенс |
+| **employment-legal** | 20 | ТК РФ: закрытый перечень ст. 81 (ат-вилл не работает), сокращения, ГПХ-vs-трудовой (Пленум ВС №15), ЛНА |
+| **litigation-legal** | 19 | АПК/ГПК: досудебный порядок ч. 5 ст. 4, kad.arbitr, сроки 1м/2м/3м, допрос ст. 88, обеспечение ст. 72 |
+| **ai-governance-legal** | 10 | ЭПР ИИ ФЗ-123 [verify], ГОСТ Р 59276/ИСО 23894, EU AI Act для экспорта |
+| **regulatory-legal** | 9 | pravo.gov.ru монитор, гильотина ПП №1128, 44/223-ФЗ, ФАС |
+| **ip-legal** | 12 | Роспатент/ФИПС, ГК ч. 4, СИПН, OSS (AGPL-triggers) |
+| **product-legal** | 9 | ФЗ-38 реклама + ЕРИР, ЗоЗПП, оферта ст. 437/428, Честный ЗНАК |
+
+## Быстрый старт
+
+```bash
+git clone https://github.com/Osmosy/vector-legal.git
+# В Hermes: укажи путь к домену и запусти cold-start interview:
+#   «Пройти cold-start интервью commercial-legal»
+```
+
+Каждый домен: `<domain>/README.md` — описание и таблица навыков;
+`<domain>/CLAUDE.md` — шаблон practice profile.
+
+Статусы, план и принцип адаптации: [domains-status.md](domains-status.md).
 
 ## Домены (roadmap)
 
-Полная таблица статусов и план: [domains-status.md](domains-status.md).
+> Раздел ниже — исторический план; все 9 доменов уже адаптированы (таблица
+> выше). Roadmap дальнейшего (углубление доменов, MCP-коннекторы РФ-систем):
+> [domains-status.md](domains-status.md).
 
 | Домен | Статус | Замена США → РФ |
 |-------|--------|-----------------|
