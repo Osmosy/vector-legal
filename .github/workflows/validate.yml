@@ -16,7 +16,7 @@ jobs:
           python-version: '3.12'
       - run: pip install pyyaml
       - name: Validate SKILL.md frontmatter + structure
-        run: python scripts/validate.py
+        run: python3 scripts/validate.py
 
   ru-lint:
     runs-on: ubuntu-latest
@@ -28,7 +28,7 @@ jobs:
       - name: RU body lint (кириллица ≥ 5%, нет Pitfalls, consequential-gates)
         run: |
           # ru-lint уже совмещён с validate.py
-          python scripts/validate.py
+          python3 scripts/validate.py
 
   no-pii:
     runs-on: ubuntu-latest
