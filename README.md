@@ -41,7 +41,7 @@ Cron-агенты мониторинга (cookbooks/) шипятся с 4-шлю
 
 ## Архитектура
 
-**[Живая интерактивная диаграмма →](https://osmosy.github.io/vector-legal/vector-legal.architecture.html)**
+**[Живая интерактивная диаграмма →](https://osmosy.github.io/vector-legal/docs/vector-legal.architecture.html)**
 12 плагинов, 167 навыков, practice profiles, MCP-коннекторы к РФ-базам,
 consequential gates. Поиск узлов (`/`), трассировка маршрутов (`R`),
 сравнение ролей (`L`), light/dark. Источник —
