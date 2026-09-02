@@ -4,6 +4,8 @@
 
 # Vector Legal
 
+[![Ecosystem: Vector](https://img.shields.io/badge/Ecosystem-Vector-blue.svg)](https://osmosy.github.io/)
+
 **Юридический AI-департамент для Hermes Agent — 12 плагинов, 167 навыков,
 полный перенос Claude-for-Legal под российское право.**
 
