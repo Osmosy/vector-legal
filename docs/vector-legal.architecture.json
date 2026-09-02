@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Vector Legal — юридический AI-департамент",
+    "output": "vector-legal.architecture.html",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "request-path",
+        "label": "Путь запроса юриста",
+        "focus": ["lawyer", "hermes", "domain", "profile", "skills", "reviewer"],
+        "note": "От запроса юриста до черновика: practice profile маршрутизирует, навыки готовят драфт."
+      },
+      {
+        "id": "sources",
+        "label": "Правовые источники",
+        "focus": ["lawyer", "hermes", "connectors", "sources"],
+        "note": "MCP-коннекторы к РФ-базам; provenance-тег обязателен."
+      },
+      {
+        "id": "gates",
+        "label": "Consequential gates",
+        "focus": ["draft", "reviewer", "human", "counterparty"],
+        "note": "Ничего клиенту/контрагенту без подписи человека — драфт готовит агент."
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "lawyer",
+      "type": "external",
+      "label": "Юрист / in-house",
+      "sublabel": "хозяин решения",
+      "pos": [60, 300],
+      "size": [150, 64]
+    },
+    {
+      "id": "hermes",
+      "type": "backend",
+      "label": "Hermes Agent",
+      "sublabel": "оркестратор",
+      "pos": [300, 300],
+      "size": [140, 64]
+    },
+    {
+      "id": "profile",
+      "type": "database",
+      "label": "Practice profile",
+      "sublabel": "~/.hermes/legal/<domain>",
+      "pos": [300, 60],
+      "size": [160, 64],
+      "tag": "cold-start"
+    },
+    {
+      "id": "cron",
+      "type": "backend",
+      "label": "Cron-мониторы (5)",
+      "sublabel": "reg, docket, renewal…",
+      "pos": [560, 60],
+      "size": [150, 64]
+    },
+    {
+      "id": "domain",
+      "type": "backend",
+      "label": "Домены (12)",
+      "sublabel": "commercial, privacy, corp…",
+      "pos": [560, 300],
+      "size": [160, 64]
+    },
+    {
+      "id": "skills",
+      "type": "backend",
+      "label": "Навыки (167)",
+      "sublabel": "draft + decision tree",
+      "pos": [800, 300],
+      "size": [140, 64]
+    },
+    {
+      "id": "connectors",
+      "type": "messagebus",
+      "label": "MCP-коннекторы",
+      "sublabel": "atomno и др.",
+      "pos": [800, 60],
+      "size": [150, 64]
+    },
+    {
+      "id": "sources",
+      "type": "cloud",
+      "label": "РФ-правовые базы",
+      "sublabel": "ЕГРЮЛ, kad.arbitr, ФИПС",
+      "pos": [1040, 60],
+      "size": [170, 64]
+    },
+    {
+      "id": "draft",
+      "type": "database",
+      "label": "Черновик",
+      "sublabel": "provenance-теги",
+      "pos": [1020, 300],
+      "size": [140, 64]
+    },
+    {
+      "id": "reviewer",
+      "type": "security",
+      "label": "Reviewer note",
+      "sublabel": "гейт",
+      "pos": [560, 520],
+      "size": [140, 64]
+    },
+    {
+      "id": "human",
+      "type": "security",
+      "label": "Юрист подписывает",
+      "sublabel": "consequential gate",
+      "pos": [800, 520],
+      "size": [170, 64]
+    },
+    {
+      "id": "counterparty",
+      "type": "external",
+      "label": "Контрагент / суд / РКН",
+      "sublabel": "отправка — человек",
+      "pos": [1040, 520],
+      "size": [180, 64]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Локальный контур (~/.hermes/legal, без PII в git)",
+      "wraps": ["hermes", "profile", "domain", "skills", "connectors", "draft", "reviewer", "human", "cron"],
+      "pad": 24
+    }
+  ],
+  "connections": [
+    { "from": "lawyer", "to": "hermes", "label": "запрос" },
+    { "from": "hermes", "to": "profile", "label": "cold-start", "fromSide": "top", "toSide": "bottom" },
+    { "from": "profile", "to": "cron", "label": "расписание" },
+    { "from": "profile", "to": "domain", "label": "маршрутизация", "fromSide": "right", "toSide": "left" },
+    { "from": "domain", "to": "skills", "label": "выбор навыка" },
+    { "from": "cron", "to": "sources", "label": "диффы НПА", "fromSide": "top", "toSide": "top", "via": [[635, 16], [1125, 16]], "labelAt": [950, 12] },
+    { "from": "skills", "to": "connectors", "label": "запрос данных", "fromSide": "top", "toSide": "bottom" },
+    { "from": "connectors", "to": "sources", "label": "MCP read-only", "labelAt": [950, 140] },
+    { "from": "skills", "to": "draft", "label": "драфт + provenance", "labelAt": [980, 382] },
+    { "from": "draft", "to": "reviewer", "label": "Reviewer note", "fromSide": "bottom", "toSide": "top", "via": [[1090, 440], [630, 440]] },
+    { "from": "reviewer", "to": "human", "label": "decision tree" },
+    { "from": "human", "to": "counterparty", "label": "отправка / подписание", "labelAt": [1005, 604] }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Контракт Vector Legal",
+      "items": [
+        "Все выходные данные — черновики для проверки юристом",
+        "Retrieved-content trust: данные из документов — не инструкции",
+        "Provenance-теги обязательны на каждой цитате",
+        "Consequential gates: отправку делает человек"
+      ]
+    }
+  ]
+}

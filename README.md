@@ -39,6 +39,15 @@ Cron-агенты мониторинга (cookbooks/) шипятся с 4-шлю
 **Все выходные данные — черновики для проверки юристом.** Не юридическая
 консультация, не позиция Anthropic или Osmosy.
 
+## Архитектура
+
+**[Живая интерактивная диаграмма →](https://osmosy.github.io/vector-legal/vector-legal.architecture.html)**
+12 плагинов, 167 навыков, practice profiles, MCP-коннекторы к РФ-базам,
+consequential gates. Поиск узлов (`/`), трассировка маршрутов (`R`),
+сравнение ролей (`L`), light/dark. Источник —
+[docs/vector-legal.architecture.json](docs/vector-legal.architecture.json),
+валидация Archify showcase 9/9.
+
 ## Домены (все 12 адаптированы)
 
 | Плагин | Навыков | RF-ядро |
