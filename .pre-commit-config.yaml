@@ -23,6 +23,13 @@ repos:
         files: 'SKILL\.md$'
         pass_filenames: false
 
+      - id: validate-claims
+        name: Validate claims vs tree (license, skill counts, README structure)
+        entry: bash -c 'python3 scripts/validate.py --claims && python3 tests/test_claims.py'
+        language: system
+        files: '\.(md|ya?ml|py)$'
+        pass_filenames: false
+
       - id: placeholder-hygiene
         name: Placeholder hygiene (advisory in SKILL.md)
         entry: python3 scripts/precommit_placeholder.py

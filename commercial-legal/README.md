@@ -104,5 +104,5 @@ seed-договоров команды (как в CFL: никаких дефол
 ## Источник
 
 [claude-for-legal](https://github.com/anthropics/claude-for-legal) © Anthropic,
-Apache-2.0. Адаптация © Osmosy, Apache-2.0. Изменения: право РФ, пути Hermes,
+Apache-2.0. Адаптация © Osmosy, MIT. Изменения: право РФ, пути Hermes,
 русификация примеров. Не является юридической позицией ни Anthropic, ни Osmosy.

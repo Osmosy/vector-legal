@@ -138,6 +138,6 @@ commercial-legal — тот же принцип): generic дефолты пра�
 ## Источник
 
 [claude-for-legal](https://github.com/anthropics/claude-for-legal) © Anthropic,
-Apache-2.0. Адаптация © Osmosy, Apache-2.0. Изменения: право РФ
+Apache-2.0. Адаптация © Osmosy, MIT. Изменения: право РФ
 (14-ФЗ, 208-ФЗ, ГК, 135-ФЗ, НК РФ), пути Hermes, русификация. Не является
 юридической позицией ни Anthropic, ни Osmosy.

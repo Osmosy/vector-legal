@@ -62,17 +62,20 @@ user-invocable: true|false                # false — reference skills
 ## Процесс
 
 1. Fork + branch от master (`feature/<domain>-<skill>`)
-2. Проверить фронтматтер локально:
-   ```python
-   import yaml, re, pathlib
-   s = pathlib.Path('SKILL.md').read_text()
-   m = re.search(r'\n---\s*\n', s[3:])
-   fm = yaml.safe_load(s[3:m.start()+3])
-   assert fm['name'] == '<dirname>'
-   assert len(str(fm['description'])) <= 1024
+2. Прогнать проверки локально (то же, что в CI):
+   ```bash
+   python3 scripts/validate.py            # фронтматтер и структура SKILL.md
+   python3 scripts/validate.py --claims   # лицензия и числа против дерева
+   python3 tests/test_claims.py           # тесты самих проверок
    ```
-3. PR с описанием: что добавляет, какие домены затрагивает, источник норм.
-4. Проверка мейнтейнером: frontmatter, RU-язык, нормы РФ, отсутствие
+   Или одной командой: `pre-commit run --all-files`.
+3. Если добавляете навык или меняете состав домена — обновите числа в
+   документах. `--claims` сверяет их с деревом (бейдж `Skills-N`, шапки
+   README/AGENTS/agent-description, `skills/ # N` в доменных README) и упадёт
+   при расхождении: правьте цифры, а не проверку. Заявление о лицензии
+   (`Адаптация © Osmosy, <лицензия>`) сверяется с файлом `LICENSE`.
+4. PR с описанием: что добавляет, какие домены затрагивает, источник норм.
+5. Проверка мейнтейнером: frontmatter, RU-язык, нормы РФ, отсутствие
    дублирования. Дизайн-ревью: соответствует ли Legal Skill Design
    Framework (см. `legal-builder-hub/skills/skills-qa`).
 
@@ -87,4 +90,10 @@ user-invocable: true|false                # false — reference skills
 
 ## Лицензия
 
-Apache-2.0. Каждому PR — DCO sign-off (`git commit -s`).
+Код и тексты этого репозитория — **MIT** (файл `LICENSE`, © 2026 Osmosy).
+Адаптации из [anthropics/claude-for-legal](https://github.com/anthropics/claude-for-legal)
+сохраняют атрибуцию Anthropic: у апстрима лицензия Apache-2.0, на этот
+репозиторий она не переносится. Указывайте лицензию так же, как в `LICENSE` —
+иначе упадёт `python3 scripts/validate.py --claims`.
+
+Каждому PR — DCO sign-off (`git commit -s`).

@@ -164,7 +164,7 @@ law-student/
 ## Источник
 
 [claude-for-legal](https://github.com/anthropics/claude-for-legal) © Anthropic,
-Apache-2.0. Адаптация © Osmosy, Apache-2.0. Изменения: система РФ
+Apache-2.0. Адаптация © Osmosy, MIT. Изменения: система РФ
 (экзамен на статус адвоката по гл. 2-3 ФЗ-63 вместо US bar, семестры,
 суды РФ: КС РФ/ВС РФ/АС субъектов), пути Hermes (`~/.hermes/legal/`),
 руссификация примеров. Не является юридической позицией ни Anthropic,

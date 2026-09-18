@@ -161,7 +161,7 @@ seed-документов команды (как в CFL: никаких дефо
 ## Источник
 
 [claude-for-legal](https://github.com/anthropics/claude-for-legal) © Anthropic,
-Apache-2.0. Адаптация © Osmosy, Apache-2.0. Изменения: 152-ФЗ вместо GDPR,
+Apache-2.0. Адаптация © Osmosy, MIT. Изменения: 152-ФЗ вместо GDPR,
 пути Hermes (`~/.hermes/legal/`), русификация примеров, коннекторы РФ
 (pravo.gov.ru, КонсультантПлюс/Гарант, Единый реестр операторов ПД). Не
 является юридической позицией ни Anthropic, ни Osmosy.

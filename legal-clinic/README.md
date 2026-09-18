@@ -158,6 +158,6 @@ supervisor-review-queue       # Очередь супервизора → под
 ## Источник
 
 [claude-for-legal](https://github.com/anthropics/claude-for-legal) © Anthropic,
-Apache-2.0. Адаптация © Osmosy, Apache-2.0. Изменения: право РФ и ФЗ-324,
+Apache-2.0. Адаптация © Osmosy, MIT. Изменения: право РФ и ФЗ-324,
 пути Hermes, русификация примеров, ужесточение супервизорского гейта.
 Не является юридической позицией ни Anthropic, ни Osmosy.

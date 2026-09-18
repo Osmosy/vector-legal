@@ -18,6 +18,12 @@ jobs:
       - name: Validate SKILL.md frontmatter + structure (errors fail)
         run: python3 scripts/validate.py
 
+      - name: Validate claims vs tree (license, skill counts, README structure)
+        run: python3 scripts/validate.py --claims
+
+      - name: Tests for validate.py checks
+        run: python3 tests/test_claims.py
+
   ru-lint-warnings:
     runs-on: ubuntu-latest
     steps:

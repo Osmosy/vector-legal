@@ -7,7 +7,7 @@
 ## Что это
 
 Vector Legal — набор юридических навыков для Hermes Agent, адаптированный из
-anthropics/claude-for-legal под российское право. 12 плагинов, 167 навыков.
+anthropics/claude-for-legal под российское право. 12 плагинов, 168 навыков.
 
 ## Базовые правила
 
@@ -81,5 +81,9 @@ Repo — исходники навыков. Заполненные profiles, р�
 
 ## Лицензия
 
-Apache-2.0. Адаптации из anthropics/claude-for-legal сохраняют атрибуцию
-Anthropic.
+Код и тексты этого репозитория — **MIT** (`LICENSE`, Copyright (c) 2026 Osmosy).
+Адаптации из anthropics/claude-for-legal сохраняют атрибуцию Anthropic; у
+апстрима лицензия Apache-2.0, на этот репозиторий она не переносится.
+
+Числа о составе (плагины, навыки) сверяются с деревом валидатором:
+`python3 scripts/validate.py --claims` (падает при расхождении).

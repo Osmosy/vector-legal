@@ -94,6 +94,6 @@ portfolio list             # портфель и дедлайны
 ## Источник
 
 [claude-for-legal](https://github.com/anthropics/claude-for-legal) © Anthropic,
-Apache-2.0. Адаптация © Osmosy, Apache-2.0. Изменения: право РФ (ГК ч. 4),
+Apache-2.0. Адаптация © Osmosy, MIT. Изменения: право РФ (ГК ч. 4),
 пути Hermes, русификация примеров. Не является юридической позицией ни
 Anthropic, ни Osmosy.

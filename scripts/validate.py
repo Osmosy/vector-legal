@@ -122,6 +122,204 @@ def mentions_sources(body: str) -> bool:
     return bool(re.search(r'\b(ст\.|ГК|ТК|АПК|ГПК|КАС|КоАП|НК|ФЗ|Пленум|152-ФЗ|44-ФЗ)\b', body))
 
 
+# --- проверка заявлений о составе и лицензии (--claims) -----------------------
+#
+# Каждая проверка ниже появилась из реального дефекта аудита 18.09.2026:
+#   * README показывал бейдж «Apache 2.0» и раздел «Источник … Apache 2.0», тогда
+#     как файл LICENSE — MIT (апстрим claude-for-legal под Apache-2.0, и его
+#     лицензию выдали за свою);
+#   * бейдж «Skills: 167» при фактических 168 SKILL.md;
+#   * в одном README соседствовали «151 навык» (апстрим) и «111+ навыков»;
+#   * litigation-legal/README занижал состав: «skills/ # 19 навыков» при 20;
+#   * два раздела «## Архитектура» и два «## Быстрый старт» в README.
+
+CLAIM_FILES = ('README.md', 'AGENTS.md', 'agent-description.md')
+
+# «Якоря заявлений» — фразы, которыми документы называют ОБЩЕЕ число навыков
+# репозитория. Проверка точная: каждое совпадение должно равняться числу SKILL.md
+# в дереве. Добавляя новый документ с заявлением о составе — добавьте сюда якорь,
+# иначе такая цифра попадёт в свободный поиск ниже (см. check_claims).
+OWN_ANCHORS: tuple[tuple[str, str], ...] = (
+    ('README.md', r'Hermes Agent\s*—\s*\d+\s+плагинов,\s*(\d+)\s+навык'),
+    ('README.md', r'^\d+\s+плагинов,\s*(\d+)\s+навык(?:ов)?,\s*practice profiles'),
+    ('AGENTS.md', r'\d+\s+плагинов,\s*(\d+)\s+навык'),
+    ('agent-description.md', r'Библиотека из\s*(\d+)\s+навык'),
+)
+
+# Якоря заявлений об АПСТРИМЕ (anthropics/claude-for-legal). Не сверяются с деревом
+# (апстрим здесь не лежит), но обязаны совпадать между собой: 18.09.2026 README
+# одновременно утверждал «151 навык» и «111+ навыков».
+UPSTREAM_ANCHORS: tuple[tuple[str, str], ...] = (
+    ('README.md', r'claude-for-legal\)\s*\(Anthropic,\s*(\d+)\s+навык'),
+    ('README.md', r'—\s*\d+\s+плагинов,\s*(\d+)\s+навык\s*\(Apache-2\.0 у апстрима'),
+    ('domains-status.md', r'claude-for-legal\s*\((\d+)\s+навык'),
+)
+
+# Как далеко от цифры искать упоминание апстрима в свободном поиске (символы).
+# Порог маленький намеренно: «claude-for-legal под российское право. 12 плагинов,
+# 168 навыков» — это НАШЕ число, стоящее далеко от маркера, и в апстрим попадать
+# не должно.
+UPSTREAM_MARKERS = ('апстрим', 'claude-for-legal', 'cfl', 'anthropic')
+UPSTREAM_WINDOW = 45
+
+
+def _anchored(text: str, patterns: tuple[tuple[str, str], ...]) -> tuple[set[int], list[int]]:
+    """Вернуть (позиции start группы с числом, значения) для набора якорей."""
+    positions: set[int] = set()
+    values: list[int] = []
+    for _name, pattern in patterns:
+        for m in re.finditer(pattern, text, re.M):
+            positions.add(m.start(1))
+            values.append(int(m.group(1)))
+    return positions, values
+
+
+def licenses_in_repo(root: pathlib.Path) -> tuple[str, set[str]]:
+    """(лицензия кода по первой строке LICENSE, набор допустимых чужих лицензий).
+
+    Лицензия кода определяется ТОЛЬКО файлом LICENSE: 18.09.2026 README показывал
+    бейдж «Apache 2.0» и «Источник … Apache 2.0», тогда как LICENSE — MIT (у
+    апстрима claude-for-legal Apache-2.0, и его лицензию выдали за свою).
+    """
+    lic = root / 'LICENSE'
+    if not lic.is_file():
+        return 'unknown', set()
+    first = lic.read_text(encoding='utf-8').splitlines()[0].strip()
+    if 'MIT License' in first:
+        actual = 'MIT'
+    elif 'Apache License' in first:
+        actual = 'Apache-2.0'
+    else:
+        actual = 'unknown'
+    # Чужие лицензии, упоминать которые законно (атрибуция). Расширять только
+    # вместе появлением соответствующей записи в THIRD_PARTY_LICENSES.md/NOTICE.
+    allowed = {'Apache-2.0'}
+    for notice_name in ('THIRD_PARTY_LICENSES.md', 'NOTICE.md'):
+        notice = root / notice_name
+        if notice.is_file():
+            allowed |= set(re.findall(
+                r'\b(MIT|Apache-2\.0|BSD-\d-Clause)\b', notice.read_text(encoding='utf-8')))
+    return actual, allowed
+
+
+def check_claims(root: pathlib.Path) -> List[str]:
+    """Заявления о составе и лицензии против дерева. Возвращает список ошибок."""
+    errors: List[str] = []
+    actual_license, _ = licenses_in_repo(root)
+    total_skills = len(list(root.rglob('SKILL.md')))
+    readme_path = root / 'README.md'
+
+    # 1. Бейдж лицензии против LICENSE.
+    if readme_path.is_file():
+        md = readme_path.read_text(encoding='utf-8')
+        badge = re.search(r'badge/License-([A-Za-z0-9._%\-]+)', md)
+        if badge:
+            declared = badge.group(1).replace('%20', ' ').replace('--', '-')
+            expected = 'MIT' if actual_license == 'MIT' else 'Apache'
+            if expected.lower() not in declared.lower():
+                errors.append(
+                    f'README: бейдж лицензии «{declared}», а LICENSE — {actual_license}')
+
+        # 2. Бейдж числа навыков.
+        for m in re.finditer(r'badge/Skills-(\d+)', md):
+            if int(m.group(1)) != total_skills:
+                errors.append(
+                    f'README: бейдж «Skills: {m.group(1)}», а SKILL.md в дереве {total_skills}')
+
+        # 3. Дубли разделов H2 (README сшивали вручную дважды — «Архитектура»
+        #    и «Быстрый старт» дублировались).
+        h2 = [l.strip() for l in md.splitlines() if l.startswith('## ')]
+        for title in sorted({h for h in h2 if h2.count(h) > 1}):
+            errors.append(f'README: раздел «{title}» встречается {h2.count(title)} раза')
+
+    # 4. Якорные заявления о НАШЕМ составе.
+    for name, pattern in OWN_ANCHORS:
+        path = root / name
+        if not path.is_file():
+            continue
+        for m in re.finditer(pattern, path.read_text(encoding='utf-8'), re.M):
+            n = int(m.group(1))
+            if n != total_skills:
+                errors.append(
+                    f'{name}: заявлено «{n} навык(ов)», а SKILL.md в дереве {total_skills}')
+
+    # 5. Якорные заявления об апстриме — обязаны совпадать между собой.
+    upstream_values: list[tuple[str, int]] = []
+    for name, pattern in UPSTREAM_ANCHORS:
+        path = root / name
+        if not path.is_file():
+            continue
+        for m in re.finditer(pattern, path.read_text(encoding='utf-8'), re.M):
+            upstream_values.append((name, int(m.group(1))))
+    if len({n for _, n in upstream_values}) > 1:
+        detail = ', '.join(f'{f}:{n}' for f, n in upstream_values)
+        errors.append(
+            f'апстрим: разные числа навыков в документации ({detail}); сверка — '
+            f'gh api repos/anthropics/claude-for-legal/git/trees/main?recursive=1')
+
+    # 6. Свободный поиск: незаякоренные «N навыков» в CLAIM_FILES. Сравниваются с
+    #    нашим числом, если рядом нет упоминания апстрима; если есть — идут в
+    #    апстрим-набор и ловят расхождение с якорями.
+    for name in CLAIM_FILES:
+        path = root / name
+        if not path.is_file():
+            continue
+        text = path.read_text(encoding='utf-8')
+        own_pos, _ = _anchored(text, OWN_ANCHORS)
+        up_pos, _ = _anchored(text, UPSTREAM_ANCHORS)
+        for m in re.finditer(r'(\d+)\s+навык(?:ов|а)?\b', text):
+            pos = m.start(1)
+            if pos in own_pos or pos in up_pos:
+                continue
+            n = int(m.group(1))
+            near = text[max(0, pos - UPSTREAM_WINDOW):m.end() + UPSTREAM_WINDOW].lower()
+            if any(marker in near for marker in UPSTREAM_MARKERS):
+                upstream_values.append((name, n))
+                continue
+            if n != total_skills:
+                errors.append(
+                    f'{name}: заявлено «{n} навык(ов)», а SKILL.md в дереве {total_skills}')
+
+    if len({n for _, n in upstream_values}) > 1:
+        detail = ', '.join(f'{f}:{n}' for f, n in upstream_values)
+        errors.append(
+            f'апстрим: разные числа навыков в документации ({detail})')
+
+    # 7. Доменные README: «# N навыков» в описании состава.
+    for domain in sorted(p for p in root.iterdir() if p.is_dir() and (p / 'skills').is_dir()):
+        readme_d = domain / 'README.md'
+        if not readme_d.is_file():
+            continue
+        fact = len(list((domain / 'skills').rglob('SKILL.md')))
+        for m in re.finditer(r'#\s*(\d+)\s+навык', readme_d.read_text(encoding='utf-8')):
+            if int(m.group(1)) != fact:
+                errors.append(
+                    f'{domain.name}/README.md: «skills/ # {m.group(1)} навыков», фактически {fact}')
+
+    # 8. Лицензия НАШЕЙ адаптации, названная в прозе, должна совпадать с LICENSE.
+    #    Бейджа мало: 18.09.2026 в 12 доменных README и в domains-status.md стояло
+    #    «Адаптация © Osmosy, Apache-2.0» при MIT в LICENSE. Формулировки разные
+    #    («Адаптация © Osmosy, MIT» и «Адаптация под право РФ и Hermes Agent
+    #    © Osmosy, MIT (см. LICENSE)»), поэтому текст склеивается в одну строку,
+    #    а якорь — пара «Адаптация … Osmosy … <лицензия>». Лицензии чужих работ
+    #    («© Anthropic, Apache-2.0») не трогаем: там нет Osmosy после «Адаптация».
+    our_adaptation = re.compile(r'Адаптация.{0,160}?Osmosy.{0,60}?(MIT|Apache-2\.0|GPL[\w.\-]*)', re.S)
+    for md_path in sorted(root.rglob('*.md')):
+        if '.git' in md_path.parts or 'node_modules' in md_path.parts:
+            continue
+        rel = str(md_path.relative_to(root))
+        if rel.startswith('skills/'):
+            continue  # legacy cowork-roles — EN-оригиналы без нашей атрибуции
+        flat = re.sub(r'\s+', ' ', md_path.read_text(encoding='utf-8'))
+        for m in our_adaptation.finditer(flat):
+            declared = m.group(1)
+            if actual_license == 'MIT' and 'MIT' not in declared.upper():
+                errors.append(
+                    f'{rel}: «Адаптация … Osmosy … {declared}», а LICENSE — MIT')
+
+    return errors
+
+
 def validate_all() -> int:
     """Прогнать все SKILL.md; return exit code.
 
@@ -195,14 +393,24 @@ def validate_all() -> int:
 
 if __name__ == '__main__':
     args = sys.argv[1:]
-    if args:
-        for f in args:
-            path = pathlib.Path(f)
-            if not path.exists():
-                print(f'not found: {f}'); sys.exit(2)
-            issues = check_skill(path)
-            for i in issues:
-                print(f'  [{f}] {i}')
-            sys.exit(1 if issues else 0)
-    else:
+    if '--claims' in args:
+        root = pathlib.Path(__file__).parent.parent
+        claim_errors = check_claims(root)
+        for e in claim_errors:
+            print(f'ERROR {e}')
+        print(f'\nИтог (заявления о составе/лицензии): ошибок {len(claim_errors)}')
+        sys.exit(1 if claim_errors else 0)
+    # Флаги режимов уходят в validate_all(). Без этой ветки «--warnings»/«--strict»
+    # попадали в разбор путей как имена файлов → «not found: --warnings», exit 2,
+    # и job ru-lint-warnings в CI падал, хотя объявлен report-only.
+    flag_args = {'--strict', '--warnings'}
+    if not args or flag_args & set(args):
         sys.exit(validate_all())
+    for f in args:
+        path = pathlib.Path(f)
+        if not path.exists():
+            print(f'not found: {f}'); sys.exit(2)
+        issues = check_skill(path)
+        for i in issues:
+            print(f'  [{f}] {i}')
+        sys.exit(1 if issues else 0)

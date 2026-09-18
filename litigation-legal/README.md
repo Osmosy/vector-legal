@@ -30,7 +30,7 @@
 litigation-legal/
 ├── CLAUDE.md   # Шаблон practice profile → копируется в CLAUDE.md
 ├── README.md                      # Этот файл
-└── skills/                        # 19 навыков
+└── skills/                        # 20 навыков
     ├── cold-start-interview/      # Интервью → пишет practice profile
     ├── customize/                 # Точечная правка профиля
     ├── matter-workspace/          # Рабочие пространства дел (для firm/мультиклиент)
@@ -145,6 +145,6 @@ Claude-версии — `~/.claude/plugins/config/...`; здесь путь Herm
 ## Источник
 
 [claude-for-legal](https://github.com/anthropics/claude-for-legal) © Anthropic,
-Apache-2.0. Адаптация © Osmosy, Apache-2.0. Изменения: АПК/ГПК/ГК/НК вместо
+Apache-2.0. Адаптация © Osmosy, MIT. Изменения: АПК/ГПК/ГК/НК вместо
 FRCP/UCC/права штатов, пути Hermes, русификация примеров. Не является
 юридической позицией ни Anthropic, ни Osmosy.

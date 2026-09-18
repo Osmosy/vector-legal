@@ -71,7 +71,7 @@
     {
       "id": "skills",
       "type": "backend",
-      "label": "Навыки (167)",
+      "label": "Навыки (168)",
       "sublabel": "draft + decision tree",
       "pos": [800, 300],
       "size": [140, 64]

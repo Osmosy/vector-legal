@@ -95,5 +95,5 @@
 ## Источник и лицензия
 
 Скелет и структура: [anthropics/claude-for-legal](https://github.com/anthropics/claude-for-legal)
-© Anthropic, Apache-2.0. Адаптация под право РФ и Hermes Agent © Osmosy,
-Apache-2.0. Не является юридической позицией Anthropic или Osmosy.
+© Anthropic, Apache-2.0 (апстрим). Адаптация под право РФ и Hermes Agent
+© Osmosy, MIT (см. LICENSE). Не является юридической позицией Anthropic или Osmosy.

@@ -6,13 +6,13 @@
 
 [![Ecosystem: Vector](https://img.shields.io/badge/Ecosystem-Vector-blue.svg)](https://osmosy.github.io/)
 
-**Юридический AI-департамент для Hermes Agent — 12 плагинов, 167 навыков,
+**Юридический AI-департамент для Hermes Agent — 12 плагинов, 168 навыков,
 полный перенос Claude-for-Legal под российское право.**
 
 [![Hermes Agent](https://img.shields.io/badge/Hermes-Agent-blue.svg)](https://github.com/NousResearch/hermes-agent)
 [![Plugins: 12/12](https://img.shields.io/badge/Plugins-12%2F12-green.svg)](#домены)
-[![Skills: 167](https://img.shields.io/badge/Skills-167-blue.svg)]()
-[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-yellow.svg)](LICENSE)
+[![Skills: 168](https://img.shields.io/badge/Skills-168-blue.svg)]()
+[![License: Apache 2.0](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 </div>
 
@@ -44,7 +44,9 @@ Cron-агенты мониторинга (cookbooks/) шипятся с 4-шлю
 ## Архитектура
 
 **[Живая интерактивная диаграмма →](https://osmosy.github.io/vector-legal/docs/vector-legal.architecture.html)**
-12 плагинов, 167 навыков, practice profiles, MCP-коннекторы к РФ-базам,
+
+**[Простыми словами: что такое Vector Legal →](docs/essay-plain-ru.md)** — объяснение без юридического и технического жаргона.
+12 плагинов, 168 навыков, practice profiles, MCP-коннекторы к РФ-базам,
 consequential gates. Поиск узлов (`/`), трассировка маршрутов (`R`),
 сравнение ролей (`L`), light/dark. Источник —
 [docs/vector-legal.architecture.json](docs/vector-legal.architecture.json),
@@ -102,18 +104,23 @@ git clone https://github.com/Osmosy/vector-legal.git
 
 ## MCP-коннекторы
 
-| Коннектор | Система |
-|-----------|---------|
-| Ironclad | Управление контрактами |
-| DocuSign | Электронная подпись |
-| iManage | Документооборот |
-| Everlaw | E-discovery |
-| CourtListener | Судебные дела (PACER) |
-| Slack | Коммуникации |
-| Google Drive | Документы |
-| Box | Хранилище |
+**РФ-базы — приоритет** (подробно: [CONNECTORS-ru-mcp.md](CONNECTORS-ru-mcp.md) —
+ландшафт MCP-серверов, таблица по доменам, подключение через `hermes mcp add`):
 
-## Архитектура
+| Источник | Что даёт |
+|----------|----------|
+| kad.arbitr.ru / sudact.ru | Арбитражная и общая практика (вместо CourtListener) |
+| ЕГРЮЛ/ЕГРИП, ФНС | Проверка контрагента, статус, директор, учредители |
+| ФССП, Федресурс | Долги, банкротства, корпоративные процедуры |
+| pravo.gov.ru, КонсультантПлюс | Тексты НПА и их изменения |
+| Роспатент / ФИПС | Товарные знаки, патенты |
+| zakupki.gov.ru | 44/223-ФЗ, тендеры |
+
+US-коннекторы из апстрима (Ironclad, DocuSign, iManage, Everlaw, CourtListener,
+Slack, Google Drive, Box) сохранены как справочная точка: они не подключены по
+умолчанию и заменяются РФ-аналогами (см. таблицу замен в `CONNECTORS.md`).
+
+## Схема маршрутизации
 
 ```
 Юридическая задача → Vector Legal (оркестратор)
@@ -129,12 +136,9 @@ git clone https://github.com/Osmosy/vector-legal.git
                        └── ФОН: 8 агентов мониторинга
 ```
 
-## Быстрый старт
+## Примеры запросов
 
 ```bash
-git clone https://github.com/Osmosy/vector-legal.git
-
-# Примеры
 hermes "Проверь договор поставки мяса на риски"           # → commercial-legal
 hermes "Отслеживай изменения в 152-ФЗ"                     # → regulatory-legal
 hermes "Проверь compliance с EU AI Act"                    # → ai-governance-legal
@@ -144,6 +148,13 @@ hermes "Подготовь трудовой договор для обвальщ
 ## Важное предупреждение
 
 **Все выходные данные — черновики.** Агенты не заменяют юриста. Каждый документ требует проверки квалифицированным специалистом. Источники указываются явно.
+
+## License
+
+Код и тексты этого репозитория — **MIT** (`LICENSE`, Copyright (c) 2026 Osmosy).
+Адаптации из [anthropics/claude-for-legal](https://github.com/anthropics/claude-for-legal)
+сохраняют атрибуцию Anthropic; у апстрима лицензия Apache-2.0, она не переносится
+на этот репозиторий.
 
 ## Связанные проекты Vector
 
@@ -155,4 +166,5 @@ hermes "Подготовь трудовой договор для обвальщ
 
 ## Источник
 
-Адаптировано из [Anthropic Claude-for-Legal](https://github.com/anthropics/claude-for-legal) — 60+ агентов, 111+ навыков. Apache 2.0.
+Адаптировано из [Anthropic Claude-for-Legal](https://github.com/anthropics/claude-for-legal)
+— 12 плагинов, 151 навык (Apache-2.0 у апстрима; код этого репозитория — MIT, см. `LICENSE`).

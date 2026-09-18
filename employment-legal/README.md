@@ -132,6 +132,6 @@ hiring-review <оффер>         # Оффер/трудовой договор 
 ## Источник
 
 [claude-for-legal](https://github.com/anthropics/claude-for-legal) © Anthropic,
-Apache-2.0. Адаптация © Osmosy, Apache-2.0. Изменения: ТК РФ вместо US-права,
+Apache-2.0. Адаптация © Osmosy, MIT. Изменения: ТК РФ вместо US-права,
 пути Hermes, русификация примеров. Не является юридической позицией ни
 Anthropic, ни Osmosy.

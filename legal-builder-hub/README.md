@@ -165,6 +165,6 @@ skill-installer <навык>       # установка с полным trust-п
 ## Источник
 
 [claude-for-legal/legal-builder-hub](https://github.com/anthropics/claude-for-legal)
-© Anthropic, Apache-2.0. Адаптация © Osmosy, Apache-2.0. Изменения: Hermes-
+© Anthropic, Apache-2.0. Адаптация © Osmosy, MIT. Изменения: Hermes-
 пути и конвенции, RU-тела, реестры, архивирование при uninstall. Не является
 юридической позицией ни Anthropic, ни Osmosy.

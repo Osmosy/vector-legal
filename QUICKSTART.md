@@ -1,4 +1,4 @@
-# QUICSTART — Быстрый старт Vector Legal (Hermes Agent)
+# QUICKSTART — Быстрый старт Vector Legal (Hermes Agent)
 
 **60 секунд до первого навыка.**
 
@@ -26,8 +26,8 @@ git clone https://github.com/Osmosy/vector-legal.git ~/projects/vector-legal
 4. **Подключить правовой источник.** Citations без него помечаются
    «unverified». Сейчас РФ-источники работают через web_search
    (kad.arbitr.ru, pravo.gov.ru, КонсультантПлюс-free) с обязательными
-   provenance-тегами. MCP-коннекторы к российским базам — в roadmap
-   (см. CONNECTORS.md).
+   provenance-тегами. MCP-коннекторы к российским базам —
+   ландшафт и таблица по доменам в CONNECTORS-ru-mcp.md, коротко — CONNECTORS.md.
 
 ## User scope, не project scope
 
