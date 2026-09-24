@@ -78,6 +78,7 @@ Repo — исходники навыков. Заполненные profiles, р�
 - **Practice profile домена** — <domain>/CLAUDE.md
 - **Спецификация переноса** — SPECIFICATION-cfl-transfer.md
 - **Аудит phase 1** — RETRO-AUDIT-phase1.md
+- **Аудит 24.09.2026 и открытые задачи** — docs/agent-tasks.md
 
 ## Лицензия
 

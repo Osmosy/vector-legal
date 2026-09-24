@@ -15,13 +15,16 @@ import subprocess
 import sys
 import tempfile
 import textwrap
+import zipfile
 
 VALIDATE = pathlib.Path(__file__).resolve().parent.parent / 'scripts' / 'validate.py'
 
 
 def make_repo(tmp: pathlib.Path, *, skills: int = 3, readme: str = '', agents: str = '',
               agent_description: str = '', license_text: str = 'MIT License\n\nCopyright (c) 2026 Osmosy\n',
-              domain_readme: str | None = None, domains_status: str = '') -> pathlib.Path:
+              domain_readme: str | None = None, domains_status: str = '',
+              list_skills: bool = True, skill_body: str = 'тело\n',
+              extra_files: dict[str, str | bytes] | None = None) -> pathlib.Path:
     """Синтетический репозиторий: skills файлы + документы с заявлениями.
 
     ВАЖНО: validate.py определяет корень репозитория как `__file__.parent.parent`,
@@ -36,7 +39,7 @@ def make_repo(tmp: pathlib.Path, *, skills: int = 3, readme: str = '', agents: s
         d = tmp / 'demo-legal' / 'skills' / f'skill-{i}'
         d.mkdir(parents=True, exist_ok=True)
         (d / 'SKILL.md').write_text(
-            '---\nname: skill-%d\ndescription: demo\n---\n\nтело\n' % i, encoding='utf-8')
+            '---\nname: skill-%d\ndescription: demo\n---\n\n' % i + skill_body, encoding='utf-8')
     # skills/ (legacy) — тоже считается в общее число, как в реальном репо
     legacy = tmp / 'skills' / 'demo' / 'legacy'
     legacy.mkdir(parents=True, exist_ok=True)
@@ -53,9 +56,35 @@ def make_repo(tmp: pathlib.Path, *, skills: int = 3, readme: str = '', agents: s
     if domains_status:
         (tmp / 'domains-status.md').write_text(domains_status, encoding='utf-8')
     if domain_readme is not None:
-        (tmp / 'demo-legal' / 'README.md').write_text(
-            domain_readme.format(skills=skills), encoding='utf-8')
+        text = domain_readme.format(skills=skills)
+        if list_skills:  # доменный README обязан называть каждый навык
+            text += '\n' + ''.join(f'- skill-{i}\n' for i in range(skills))
+        (tmp / 'demo-legal' / 'README.md').write_text(text, encoding='utf-8')
+    for rel, content in (extra_files or {}).items():
+        path = tmp / rel
+        path.parent.mkdir(parents=True, exist_ok=True)
+        if isinstance(content, bytes):
+            path.write_bytes(content)
+        else:
+            path.write_text(content, encoding='utf-8')
     return tmp
+
+
+def pptx_bytes(*slides: list[str]) -> bytes:
+    """Минимальный .pptx для проверки: только ppt/slides/slideN.xml с <a:t>."""
+    import io
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, 'w') as z:
+        for i, runs in enumerate(slides, 1):
+            body = ''.join(f'<a:t>{r}</a:t>' for r in runs)
+            z.writestr(f'ppt/slides/slide{i}.xml', f'<p:sld>{body}</p:sld>')
+    return buf.getvalue()
+
+
+COOKBOOK = {'cookbooks/reg-monitor/cron-spec.yaml': 'schedule: "0 9 * * 1"\n',
+            'cookbooks/docket-watcher/cron-spec.yaml': 'schedule: "0 8 * * *"\n'}
+AGENTS_SECTION = ('\n## Агенты мониторинга\n\n| Агент | Что |\n|---|---|\n'
+                  '| reg-monitor | НПА |\n| docket-watcher | суды |\n')
 
 
 def run_claims(repo: pathlib.Path) -> tuple[int, list[str]]:
@@ -201,6 +230,67 @@ def main() -> int:
         domains_status='## Источник\n\nСкелет: claude-for-legal © Anthropic, Apache-2.0.\n'
                        'Адаптация под право РФ и Hermes Agent © Osmosy, Apache-2.0.\n'))
 
+    # --- согласованность, аудит 24.09.2026 ---
+    results.append(case(
+        'навык домена не упомянут в его README', True, 'не упомянут',
+        readme=GOOD_README, domain_readme='# Demo\n\nskill-0 и skill-1.\n', list_skills=False))
+
+    results.append(case(
+        'битая относительная ссылка в markdown', True, 'несуществующий',
+        readme=GOOD_README + '\nСм. [коннекторы](../../CONNECTORS.md).\n'))
+
+    results.append(case(
+        'ссылка на существующий файл и на URL — чисто', False,
+        readme=GOOD_README + '\nСм. [лицензию](LICENSE) и [апстрим](https://example.org/x.md).\n'))
+
+    results.append(case(
+        'SKILL.md ссылается на отсутствующий references/*.md', True, 'рядом с навыком',
+        readme=GOOD_README, skill_body='Чеклист — в `references/output-format.md`.\n'))
+
+    results.append(case(
+        'агент мониторинга в README без cron-спеки', True, 'нет cookbooks/ghost-watcher',
+        readme=GOOD_README + AGENTS_SECTION + '| ghost-watcher | призрак |\n', extra_files=COOKBOOK))
+
+    results.append(case(
+        'cron-спека не описана в README', True, 'нет строки для cookbooks/docket-watcher',
+        readme=GOOD_README + AGENTS_SECTION.replace('| docket-watcher | суды |\n', ''),
+        extra_files=COOKBOOK))
+
+    results.append(case(
+        'неверное число агентов мониторинга в тексте', True, 'cron-спек в cookbooks/ 2',
+        readme=GOOD_README + AGENTS_SECTION + '\nФон: 8 агентов мониторинга.\n', extra_files=COOKBOOK))
+
+    results.append(case(
+        'агенты мониторинга совпадают с cookbooks — чисто', False,
+        readme=GOOD_README + AGENTS_SECTION + '\nФон: 2 cron-агента.\n', extra_files=COOKBOOK))
+
+    results.append(case(
+        'пример USER-GUIDE ведёт в навык чужого домена', True, 'ведёт в «cease-desist»',
+        readme=GOOD_README,
+        extra_files={'USER-GUIDE.md': '**Demo-legal:**\n- «претензия по ИС» → `cease-desist`\n'}))
+
+    results.append(case(
+        'пример USER-GUIDE ведёт в навык своего домена — чисто', False,
+        readme=GOOD_README,
+        extra_files={'USER-GUIDE.md': '**Demo-legal:**\n- «сделай X» → `skill-1`\n'}))
+
+    results.append(case(
+        'презентация: устаревшее число навыков', True, 'слайд 1',
+        readme=GOOD_README,
+        extra_files={'deck.pptx': pptx_bytes(['12', 'плагинов', '99', 'навыков'])}))
+
+    results.append(case(
+        'презентация: лицензия адаптации Apache при MIT', True, 'лицензия адаптации не MIT',
+        readme=GOOD_README,
+        extra_files={'deck.pptx': pptx_bytes(['Адаптация (Osmosy, Apache-2.0) — русское право'])}))
+
+    results.append(case(
+        'презентация: число апстрима и верная лицензия — чисто', False,
+        readme=GOOD_README,
+        extra_files={'deck.pptx': pptx_bytes(
+            ['Основа: anthropics/claude-for-legal (Anthropic, Apache-2.0) — 151 навык',
+             'Адаптация (Osmosy, MIT)', '{total}', 'навыков'.replace('{total}', '4')])}))
+
     # Режимы самого скрипта: флаги не должны трактоваться как имена файлов
     # (регресс 02.09.2026: job ru-lint-warnings падал «not found: --warnings»).
     for flag, expect in (('--warnings', 0), ('--strict', None)):
@@ -216,6 +306,22 @@ def main() -> int:
             results.append(not bad)
         finally:
             shutil.rmtree(tmp, ignore_errors=True)
+
+    # name во фронтматтере = имени каталога (докстринг validate.py обещал это с
+    # самого начала, но проверки не было до 24.09.2026).
+    tmp = pathlib.Path(tempfile.mkdtemp())
+    try:
+        make_repo(tmp, readme=GOOD_README)
+        skill = tmp / 'demo-legal' / 'skills' / 'skill-0' / 'SKILL.md'
+        skill.write_text(skill.read_text(encoding='utf-8').replace('name: skill-0', 'name: other'),
+                         encoding='utf-8')
+        r = subprocess.run([sys.executable, str(tmp / 'scripts' / 'validate.py')],
+                           cwd=tmp, capture_output=True, text=True)
+        bad = r.returncode != 1 or '!= каталог' not in r.stdout
+        print(('FAIL  ' if bad else 'ok    ') + 'name во фронтматтере ≠ каталогу — ошибка')
+        results.append(not bad)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
 
     ok = sum(results)
     print(f'\n{ok}/{len(results)} тестов прошло')

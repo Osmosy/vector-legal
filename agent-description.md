@@ -16,7 +16,7 @@
 ## Как устроено
 
 ```
-<domain>-legal/           12 доменов (commercial, corporate, employment, ...)
+<domain>/                 12 доменов (commercial-legal, …, law-student, legal-clinic, legal-builder-hub)
   CLAUDE.md               practice profile домена (cold-start, guardrails)
   skills/<name>/SKILL.md  навык: frontmatter + тело (RU)
 AGENTS.md                 правила доступа для агентов (конституция)

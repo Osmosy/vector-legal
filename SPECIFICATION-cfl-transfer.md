@@ -1,5 +1,9 @@
 # Спецификация: полный перенос claude-for-legal → vector-legal
 
+> **Исторический документ** — снимок на 29.08.2026: числа навыков и доменов
+> здесь на ту дату. Актуальный состав — [domains-status.md](domains-status.md)
+> и `python3 scripts/validate.py --claims`.
+
 > Статус: draft v1.0 от 29.08.2026. Основа: аудит CFL @ master (151 SKILL.md,
 > 12 плагинов + cookbooks + scripts) против текущего vector-legal (128 SKILL.md,
 > 9 доменов + legacy skills/).

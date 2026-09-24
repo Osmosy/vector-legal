@@ -11,15 +11,17 @@
   и т.д. не должны попадать в git)
 - [x] **AGENTS.md (сделано 29.08)** — правила для AI-агентов: retrieved-content
   trust, provenance, consequential gates, патентные поверенные
-- [ ] **CODE_OF_CONDUCT.md** — 1 стр., стандарт Contributor Covenant
-- [ ] **GitHub Actions CI**: frontmatter-валидатор + ru-lint (проверка
-  кириллицы + отсутствие Pitfalls) на каждый PR — `scripts/validate.py`
-  уже есть как идея, надо подключить
-- [ ] **Pre-commit hooks**: markdownlint + запрет PII в `git push`
+- [x] **CODE_OF_CONDUCT.md** — 1 стр., стандарт Contributor Covenant (есть в корне)
+- [x] **GitHub Actions CI**: frontmatter-валидатор + ru-lint (проверка
+  кириллицы + отсутствие Pitfalls) на каждый PR — `.github/workflows/validate.yml`
+  (`scripts/validate.py`, `--claims`, `tests/test_claims.py`, PII-скан)
+- [x] **Pre-commit hooks**: запрет PII + валидация SKILL.md и заявлений —
+  `.pre-commit-config.yaml` (markdownlint пока не подключён)
 
 ## Уровень 2: доменная глубина
 
-- [ ] **Патент-мод для claim-chart**: сейчас только гражданско-правовой режим;
+- [x] **Патент-мод для claim-chart** — `litigation-legal/skills/patent-claim-chart`
+  (раньше был только гражданско-правовой режим);
   добавить разбор формулы по независимым признакам (ст. 1354), DOE
   (доктрина эквивалентов в РФ — Пленум №4 от 22.01.2004 п. 4, ст. 1350),
   indirect/willfulness

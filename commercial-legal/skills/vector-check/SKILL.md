@@ -3,7 +3,7 @@ name: vector-check
 description: "Load when the user asks to проверь контрагента, комплексная проверка, due diligence, проверь поставщика, проверь перед сделкой, DD на компанию, background check, vendor DD, M&A target screening, оценка рисков партнёра, проверка бенефициаров, проверка по ИНН. Covers 12 domains (website, registries, financial, VDR/AI, cyber, ESG, sanctions, OSINT, content, media, legal, tech-ops) with depth adaptation (express/standard/full) and jurisdiction awareness (RF/EU/US/UK/China/cross-border). Produces structured report with red flags, risk matrix, and Go/No-Go recommendation."
 version: 1.0.0
 author: Vector Legal / Osmosy
-license: Apache 2.0
+license: MIT
 metadata:
   hermes:
     tags: [due-diligence, compliance, kontragent, m-and-a, vendor-risk, osint, sanctions, 115-fz, egul, fssp, kad-arbitr, checko]
@@ -82,29 +82,52 @@ guardrails`, `## Outputs`). Блоки канонизируются там; ес
 | 9 | Массовый адрес / номинальный директор | EGRUL + поиск по адресу / директору |
 | 10 | Сайт (минимум) | web_extract — структура, тональность, контакты, реквизиты |
 
-**Express = шаги 1-10** (экспресс-чеклист Приложения A из источника).
+**Express = шаги 1-10** (экспресс-чеклист).
 
 ### Шаг 2 — Углубление (Standard / Full)
 
-Подробные чеклисты по 12 доменам — в `references/01-website.md` … `12-tech-ops.md`. Каждый reference — инструкция агенту «как собрать данные по этому домену, какие источники, что извлекать, как форматировать в отчёт».
+Объём по каждому из 12 доменов — таблица «Глубина» ниже. Подробные
+инструкции (источники, что извлекать, как форматировать) есть для двух
+доменов с наибольшим весом в РФ-практике:
 
-**Standard** = все 12 доменов в базовом объёме + юрисдикция (см. `references/jurisdiction-*.md`).
+| Домен таблицы | Reference |
+|---|---|
+| 02 Реестры (+ бенефициары, суды, ФССП, банкротство, ГИР БО) | `references/01-registries-RF.md` |
+| 07 Санкции + PEP | `references/02-sanctions.md` |
+| API-обогащение по реестрам (DataNewton) | `references/03-datanewton-api.md` + `references/datanewton-api-openapi-schema.json` |
+
+Для остальных доменов (сайт, финансы, VDR, кибер, ESG, OSINT, контент,
+медиа, юр, тех/опс) отдельного reference нет: объём — по таблице «Глубина»,
+источники — по общим знаниям с тегом `[model knowledge — verify]` и явной
+пометкой в Reviewer note, что домен собран без чеклиста.
+
+**Standard** = все 12 доменов в базовом объёме + юрисдикционный анализ (шаг 3).
 **Full** = все 12 доменов глубоко + VDR (если есть) + Q&A + интервью + мониторинг.
 
 ### Шаг 3 — Юрисдикционный глубокий анализ
 
-После сбора общих данных подключить юрисдикционный reference:
+После сбора общих данных — юрисдикционный проход. Для России он описан в
+`references/01-registries-RF.md` (ЕГРЮЛ deep dive, бенефициары, 115-ФЗ,
+ГИР БО, массовый адрес, реестр дисквалификации, ОКВЭД, лицензии). Для
+других юрисдикций reference-файлов нет — чек-лист ниже, каждый факт с
+`[model knowledge — verify]` или тегом первоисточника:
 
-- `references/jurisdiction-russia.md` — EGRUL deep dive, бенефициары, 115-ФЗ, ГИР БО, масс-адрес, реестр дисквалификации, ОКВЭД, лицензии
-- `references/jurisdiction-eu.md` — CSRD/CSDDD/GDPR/DG Comp/Unternehmensregister
-- `references/jurisdiction-us.md` — SEC EDGAR 10-K, PACER, OFAC 50% Rule, ITAR/EAR, state-level
-- `references/jurisdiction-uk.md` — Companies House + PSC, OFSI, FCA, Modern Slavery Act
-- `references/jurisdiction-china.md` — GSXT, SOE status, PIPL, Negative List
-- `references/jurisdiction-crossborder.md` — OpenCorporates, OpenSanctions, BEPS, CbCR
+- **EU** — национальные реестры (Unternehmensregister и аналоги), CSRD/CSDDD, GDPR, DG Comp
+- **US** — SEC EDGAR (10-K), PACER, OFAC (правило 50%), ITAR/EAR, реестры штатов
+- **UK** — Companies House + PSC, OFSI, FCA, Modern Slavery Act
+- **Китай** — GSXT, статус госпредприятия, PIPL, Negative List
+- **Трансгранично** — OpenCorporates, OpenSanctions, BEPS / CbCR
 
 ### Шаг 4 — Синтез и отчёт
 
-Структура отчёта — в `references/output-format.md`. Содержит: Executive Summary, Red Flag Summary, 10 секций, Risk Matrix, Recommendation (Go / No-Go / Conditional), Приложение с источниками.
+Структура отчёта (отдельного `output-format.md` нет — канон здесь):
+
+1. **Executive Summary** — цель, тип сделки, глубина, итоговая рекомендация одной строкой
+2. **Red Flag Summary** — все CRITICAL / HIGH с источником
+3. **Разделы по доменам** — по одному на каждый домен, попавший в выбранную глубину (таблица «Глубина»); домен без данных — «не доступно / требует ручной проверки»
+4. **Risk Matrix** — домен × severity
+5. **Recommendation** — Go / No-Go / Conditional (условия списком)
+6. **Приложение: источники** — каждый факт с provenance-тегом и датой выписки
 
 **Язык:** русский по умолчанию для русскоязычного юзера, использовать `ru-text` skill для типографики (кавычки «», тире —, неразрывные пробелы). Имена компаний и продуктов — в оригинале.
 
@@ -212,8 +235,8 @@ memory(
 - [ ] Шаг 0 scoping завершён (цель, тип сделки, глубина, юрисдикция, язык, путь сохранения)
 - [ ] Express-уровень собран (шаги 1-10) — для любой глубины
 - [ ] Дополнительные домены добавлены согласно уровню глубины
-- [ ] Юрисдикционный reference применён
-- [ ] Отчёт соответствует `output-format.md`
+- [ ] Юрисдикционный проход выполнен (РФ — `references/01-registries-RF.md`)
+- [ ] Отчёт соответствует структуре из шага 4
 - [ ] Severity расставлен (CRITICAL / HIGH / MEDIUM / LOW)
 - [ ] Источники процитированы явно
 - [ ] Рекомендация ясная: Go / No-Go / Conditional

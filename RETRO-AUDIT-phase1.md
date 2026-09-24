@@ -1,5 +1,9 @@
 # RETRO-AUDIT: перенос phase 1 claude-for-legal → vector-legal
 
+> **Исторический документ** — снимок на 29.08.2026: числа навыков и доменов
+> здесь на ту дату. Актуальный состав — [domains-status.md](domains-status.md)
+> и `python3 scripts/validate.py --claims`.
+
 **Дата:** 29.08.2026 · **Аудитор:** независимый субагент (frontier) · **Контракт:** SUB-20260829-004 (read-only + write отчёта, max_hops: 1)
 
 **Метод** (ретро-чеклист Google Cloud/DeepMind «Intelligent AI Delegation» + pimenov.ai): (A) полнота vs оригинал; (B) YAML-фронтматтер (parse, name=dirname, description ≤1024); (C) RU-нормы в теле каждого навыка (ГК/ТК/АПК/ГПК/КоАП/НК/ФЗ-NN/Пленумы) + provenance-теги; (D) паттерн-комплаенс (0 секций Pitfalls, Reviewer note, decision tree, Destination check); (E) CLAUDE.md на месте и непустой; (F) деградация: VL <50% длины CFL-оригинала и без RU-права = «degraded». Эталон: `/tmp/cfl-retro` = github.com/anthropics/claude-for-legal (клон main). Выборка: 115 навыков, сверено позициенно (все 115×115 попаданий по имени, длины по каждому, регэкспы по каждому файлу).
