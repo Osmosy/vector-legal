@@ -35,6 +35,7 @@ commercial-legal/
     ├── amendment-history/         # Трекинг допсоглашений
     ├── renewal-tracker/           # Реестр продлений
     ├── escalation-flagger/        # Эскалации по матрице
+    ├── vector-check/              # DD контрагента до сделки (расширение сверх CFL)
     ├── review-proposals/          # Очередь предложений к playbook
     └── stakeholder-summary/       # Саммари для бизнеса
 ```

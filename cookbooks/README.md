@@ -10,11 +10,14 @@ template. В Hermes всё становится **cronjob** с периодич�
 ## Общая схема для всех 5 агентов
 
 ```
-<domain>/cookbooks/<agent>/
-├── README.md              # охват, security tier, handoffs
-├── cron-spec.yaml         # Hermes cronjob: schedule + prompt + toolsets
-└── leaf-workers.md        # роли leaf-воркеров (в Hermes инлайн в prompt)
+cookbooks/<agent>/
+└── cron-spec.yaml         # Hermes cronjob: schedule + prompt + toolsets;
+                           # роли leaf-воркеров — инлайн в prompt
 ```
+
+Охват, security tier и handoffs всех агентов описаны в этом файле ниже;
+отдельных `README.md` / `leaf-workers.md` у агентов нет (в CFL они были,
+в Hermes-переносе свёрнуты в cron-spec и этот README).
 
 ## Общий каркас cron-спеки (RU)
 

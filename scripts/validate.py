@@ -5,9 +5,11 @@ vector-legal validators: frontmatter + RU-lint + structural checks
         python3 scripts/validate.py <domain>/skills/<name>/SKILL.md   # one skill
 
 Проверки:
-1. Frontmatter: YAML parse, `---` opening/closing, name == dirname,
-   description присутствует и ≤ 1024 символов, начинается с «Используй»
-   или «Use» (trigger-first по Hermes-конвенции), argument-hint
+1. Frontmatter: YAML parse, `---` opening/closing, name == имени каталога,
+   description присутствует и ≤ 1024 символов; argument-hint — advisory.
+   Формулировку description (что делает + когда загружать) валидатор не
+   проверяет: триггеры пишутся по-разному («Используй при…», «когда
+   пользователь говорит…», «Загружается навыком…») — см. CONTRIBUTING.md
 2. Body: русское тело (кириллица ≥50% среди букв), есть # заголовок
 3. Anti-pattern: нет «## Pitfalls»/«## Common Pitfalls» секций
 4. Consequential-gates: навыки с 'send|file|takedown|sign|претензия' в
@@ -80,6 +82,9 @@ def check_skill(path: pathlib.Path) -> List['str']:
     s = path.read_text(encoding='utf-8')
     fm_issues = validate_frontmatter(s)
     issues.extend([f'frontmatter: {i}' for i in fm_issues])
+    name = frontmatter_name(s)
+    if name is not None and name != path.parent.name:
+        issues.append(f'frontmatter: name «{name}» != каталог «{path.parent.name}»')
 
     # Body после закрытия frontmatter
     m = re.search(r'\n---\s*\n', s[3:])
@@ -115,6 +120,18 @@ def check_skill(path: pathlib.Path) -> List['str']:
     if '[PLACEHOLDER]' in body:
         issues.append('WARNING: [PLACEHOLDER] в SKILL.md — advisory only')
     return issues
+
+
+def frontmatter_name(s: str):
+    """`name` из фронтматтера или None, если его не разобрать."""
+    m = re.search(r'\n---\s*\n', s[3:]) if s.startswith('---') else None
+    if not m:
+        return None
+    try:
+        fm = yaml.safe_load(s[3:m.start()+3])
+    except yaml.YAMLError:
+        return None
+    return fm.get('name') if isinstance(fm, dict) else None
 
 
 def mentions_sources(body: str) -> bool:
@@ -317,6 +334,150 @@ def check_claims(root: pathlib.Path) -> List[str]:
                 errors.append(
                     f'{rel}: «Адаптация … Osmosy … {declared}», а LICENSE — MIT')
 
+    errors.extend(check_domain_readmes(root))
+    errors.extend(check_links(root))
+    errors.extend(check_cron_agents(root))
+    errors.extend(check_guide_examples(root))
+    errors.extend(check_presentation(root, total_skills, actual_license))
+    return errors
+
+
+# --- проверки согласованности, аудит 24.09.2026 -------------------------------
+#
+# Каждая — из дефекта, найденного на аудите:
+#   * commercial-legal/README не упоминал vector-check, litigation-legal/README —
+#     patent-claim-chart (при «# 20 навыков» в дереве из 19 строк);
+#   * vector-check ссылался на 19 несуществующих references/*.md; 11 навыков
+#     cowork-roles — на несуществующий ../../CONNECTORS.md;
+#   * README перечислял 8 агентов мониторинга (3 несуществующих, у остальных
+#     другие имена) при 5 cron-спеках в cookbooks/;
+#   * USER-GUIDE отправлял «претензию по ИС» в commercial-legal (навык в ip-legal),
+#     «settlement» — в несуществующий litigation-legal/escalation-flagger;
+#   * презентация: «167 навыков» и «Apache-2.0» как лицензия адаптации при MIT.
+
+def _skill_dirs(domain: pathlib.Path) -> list[pathlib.Path]:
+    return sorted(p.parent for p in (domain / 'skills').rglob('SKILL.md'))
+
+
+def check_domain_readmes(root: pathlib.Path) -> List[str]:
+    """Каждый навык домена назван в README домена (дерево, таблица или текст)."""
+    errors: List[str] = []
+    for domain in sorted(p for p in root.iterdir() if p.is_dir() and (p / 'skills').is_dir()):
+        if domain.name == 'skills':
+            continue  # legacy cowork-roles — без доменного README
+        readme = domain / 'README.md'
+        if not readme.is_file():
+            continue  # отсутствие README — не заявление; составы сверяются там, где они есть
+        text = readme.read_text(encoding='utf-8')
+        for skill in _skill_dirs(domain):
+            if not re.search(rf'(?<![\w-]){re.escape(skill.name)}(?![\w-])', text):
+                errors.append(f'{domain.name}/README.md: навык «{skill.name}» не упомянут')
+    return errors
+
+
+_LINK_RE = re.compile(r'\]\(([^)\s]+)\)')
+_REF_RE = re.compile(r'`(references/[A-Za-z0-9_./-]+\.(?:md|json|yaml))`')
+
+
+def check_links(root: pathlib.Path) -> List[str]:
+    """Относительные ссылки в *.md и пути `references/…` в SKILL.md существуют."""
+    errors: List[str] = []
+    for md in sorted(root.rglob('*.md')):
+        if '.git' in md.parts:
+            continue
+        text = md.read_text(encoding='utf-8', errors='ignore')
+        rel = md.relative_to(root)
+        for m in _LINK_RE.finditer(text):
+            target = m.group(1).split('#')[0]
+            if not target or re.match(r'[a-z][a-z0-9+.-]*:', target):
+                continue  # URL, mailto:, чистый якорь
+            if not (md.parent / target).exists():
+                errors.append(f'{rel}: ссылка на несуществующий «{m.group(1)}»')
+        if md.name == 'SKILL.md':
+            for m in _REF_RE.finditer(text):
+                if not (md.parent / m.group(1)).exists():
+                    errors.append(f'{rel}: нет файла «{m.group(1)}» рядом с навыком')
+    return errors
+
+
+def check_cron_agents(root: pathlib.Path) -> List[str]:
+    """Агенты мониторинга в README = cron-спеки в cookbooks/; число в тексте верное."""
+    errors: List[str] = []
+    cookbooks = root / 'cookbooks'
+    if not cookbooks.is_dir():
+        return errors
+    agents = {p.parent.name for p in cookbooks.glob('*/cron-spec.yaml')}
+    readme = root / 'README.md'
+    if readme.is_file():
+        md = readme.read_text(encoding='utf-8')
+        section = re.search(r'^## Агенты мониторинга\n(.*?)(?=^## |\Z)', md, re.S | re.M)
+        if section:
+            listed = set(re.findall(r'^\|\s*`?([a-z][a-z0-9-]+)`?\s*\|', section.group(1), re.M))
+            listed -= {'агент'}
+            for name in sorted(listed - agents):
+                errors.append(f'README «Агенты мониторинга»: «{name}» — нет cookbooks/{name}/cron-spec.yaml')
+            for name in sorted(agents - listed):
+                errors.append(f'README «Агенты мониторинга»: нет строки для cookbooks/{name}')
+    for name in ('README.md', 'USER-GUIDE.md', 'cookbooks/README.md'):
+        path = root / name
+        if not path.is_file():
+            continue
+        for m in re.finditer(r'(\d+)\s+(?:cron-агент|автономн\w+ агент|агент\w* мониторинга)',
+                             path.read_text(encoding='utf-8')):
+            if int(m.group(1)) != len(agents):
+                errors.append(f'{name}: «{m.group(0)}», а cron-спек в cookbooks/ {len(agents)}')
+    return errors
+
+
+def check_guide_examples(root: pathlib.Path) -> List[str]:
+    """Примеры «запрос → `навык`» в USER-GUIDE ведут в навык своего домена."""
+    errors: List[str] = []
+    guide = root / 'USER-GUIDE.md'
+    if not guide.is_file():
+        return errors
+    domain = None
+    for line in guide.read_text(encoding='utf-8').splitlines():
+        head = re.match(r'^\*\*([A-Za-z-]+):\*\*\s*$', line.strip())
+        if head:
+            name = head.group(1).lower()
+            domain = root / name if (root / name / 'skills').is_dir() else None
+            continue
+        if domain is None:
+            continue
+        if line.startswith('#'):
+            domain = None
+            continue
+        for m in re.finditer(r'→\s*`([a-z][a-z0-9-]+)', line):
+            if not (domain / 'skills' / m.group(1) / 'SKILL.md').is_file():
+                errors.append(f'USER-GUIDE.md: пример в «{domain.name}» ведёт в «{m.group(1)}» — '
+                              f'нет {domain.name}/skills/{m.group(1)}')
+    return errors
+
+
+def check_presentation(root: pathlib.Path, total_skills: int, actual_license: str) -> List[str]:
+    """Число навыков и лицензия адаптации в *.pptx в корне совпадают с деревом/LICENSE."""
+    import zipfile
+    errors: List[str] = []
+    for pptx in sorted(root.glob('*.pptx')):
+        with zipfile.ZipFile(pptx) as z:
+            slides = sorted((n for n in z.namelist() if re.match(r'ppt/slides/slide\d+\.xml$', n)),
+                            key=lambda n: int(re.search(r'(\d+)', n).group(1)))
+            for n in slides:
+                runs = re.findall(r'<a:t>([^<]*)</a:t>', z.read(n).decode('utf-8', errors='ignore'))
+                slide = re.search(r'(\d+)', n.rsplit('/', 1)[1]).group(1)
+                text = '\n'.join(runs)
+                for m in re.finditer(r'(\d+)\s+навык', text):
+                    near = text[max(0, m.start() - UPSTREAM_WINDOW):m.end() + UPSTREAM_WINDOW].lower()
+                    if any(marker in near for marker in UPSTREAM_MARKERS):
+                        continue  # число апстрима (claude-for-legal), не наше
+                    if int(m.group(1)) != total_skills:
+                        errors.append(f'{pptx.name} слайд {slide}: «{m.group(0)}», '
+                                      f'а SKILL.md в дереве {total_skills}')
+                for run in runs:
+                    if re.search(r'Адаптация|структурная база', run) \
+                            and re.search(r'Apache|MIT|GPL', run) and actual_license not in run:
+                        errors.append(f'{pptx.name} слайд {slide}: «{run}» — лицензия '
+                                      f'адаптации не {actual_license}')
     return errors
 
 
@@ -345,7 +506,9 @@ def validate_all() -> int:
         total += 1
         issues = check_skill(p)
         errs = [i for i in issues if 'advisory' not in i.lower() and 'WARNING' not in i and 'missing argument-hint' not in i]
-        warns = [i for i in issues if i.startswith('WARNING') or i.startswith('advisory:')]
+        # «frontmatter: advisory: missing argument-hint» раньше не попадал ни
+        # в errs, ни в warns — advisory терялся молча.
+        warns = [i for i in issues if 'advisory' in i.lower() or 'WARNING' in i]
         if errs:
             all_errors.append((rel, errs))
         for w in warns:

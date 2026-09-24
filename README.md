@@ -56,8 +56,8 @@ consequential gates. Поиск узлов (`/`), трассировка мар�
 
 | Плагин | Навыков | RF-ядро |
 |-------|---------|--------|
-| **commercial-legal** | 13+check | ГК (15/330/401/425/452), протоколы разногласий, 152-ФЗ в закупках, AI/ML 7-point playbook |
-| **privacy-legal** | 9 | 152-ФЗ: поручения ст. 6, запросы субъектов 30 дней, оценка вреда ст. 18.1, ТИПЗ ФСТЭК №21, трансграничка ст. 12+№931, утечки 24/72ч, КоАП 13.11 |
+| **commercial-legal** | 13 (вкл. vector-check) | ГК (15/330/401/425/452), протоколы разногласий, 152-ФЗ в закупках, AI/ML 7-point playbook |
+| **privacy-legal** | 9 | 152-ФЗ: поручения ст. 6, запросы субъектов 10 рабочих дней, оценка вреда ст. 18.1, ТИПЗ ФСТЭК №21, трансграничка ст. 12+№931, утечки 24/72ч, КоАП 13.11 |
 | **corporate-legal** | 13 | ФЗ-14/208: крупные сделки, протоколы ст. 181.2 ГК, нотариат долей, ЕГРЮЛ-комплаенс |
 | **employment-legal** | 20 | ТК РФ: закрытый перечень ст. 81 (ат-вилл не работает), сокращения, ГПХ-vs-трудовой (Пленум ВС №15), ЛНА |
 | **litigation-legal** | 20 | АПК/ГПК/КАС: досудебный порядок ч. 5 ст. 4, kad.arbitr, сроки 1м/2м/3м, допрос ст. 88, обеспечение ст. 72, **patent-claim-chart** (ГК 1354–1358, СИПН) |
@@ -91,16 +91,19 @@ git clone https://github.com/Osmosy/vector-legal.git
 
 ## Агенты мониторинга
 
-| Агент | Что отслеживает |
-|-------|----------------|
-| renewal-watcher | Даты продления контрактов |
-| playbook-monitor | Изменения в playbook'ах и политиках |
-| docket-watcher | Судебные дела (CourtListener) |
-| reg-change-monitor | Изменения в нормативных реестрах |
-| ip-renewal-watcher | Сроки патентов и товарных знаков |
-| leave-tracker | Отпуска, больничные, compliance |
-| dataroom-watcher | Состояние dataroom при сделках |
-| launch-watcher | Compliance при запуске продуктов |
+Пять cron-спек в `cookbooks/<агент>/cron-spec.yaml` (подробно —
+[cookbooks/README.md](cookbooks/README.md)):
+
+| Агент | Домен | Что отслеживает | Расписание |
+|-------|-------|----------------|-----------|
+| reg-monitor | regulatory-legal | Новые НПА и проекты: pravo.gov.ru, regulation.gov.ru, сайты ведомств | пн 09:00 |
+| renewal-watcher | commercial-legal | Окна cancel-by по реестру продлений, playbook-отклонения | пн 09:00 |
+| docket-watcher | litigation-legal | Судебные дела: kad.arbitr.ru, sudrf.ru — новые акты, заседания, дедлайны | ежедневно 08:00 |
+| launch-radar | product-legal | Запуски продуктов по 9-категорийному фреймворку | пн 10:00 |
+| diligence-grid | corporate-legal | Dataroom при сделке: новые загрузки и табличная ревизия | по запросу |
+
+Сроки отпусков и больничных ведёт не cron-агент, а навыки
+`employment-legal/skills/leave-tracker` и `log-leave`.
 
 ## MCP-коннекторы
 
@@ -133,7 +136,11 @@ Slack, Google Drive, Box) сохранены как справочная точ�
                        ├── ИИ-ПРАВО: ai-governance-legal
                        ├── ИНТЕЛЛЕКТУАЛКА: ip-legal
                        ├── ПРОДУКТЫ: product-legal
-                       └── ФОН: 8 агентов мониторинга
+                       ├── ОБУЧЕНИЕ: law-student
+                       ├── ЮРКЛИНИКИ: legal-clinic
+                       ├── КАТАЛОГ НАВЫКОВ: legal-builder-hub
+                       ├── ИССЛЕДОВАНИЕ: legal-research-ru
+                       └── ФОН: 5 cron-агентов мониторинга (cookbooks/)
 ```
 
 ## Примеры запросов
