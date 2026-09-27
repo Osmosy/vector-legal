@@ -111,8 +111,7 @@ def check_skill(path: pathlib.Path) -> List['str']:
     # цитаты и факты, а не про любые упоминания статей. Прежняя версия шумела
     # на 46 навыках, где статей много, а собственных утверждений о числах нет
     # (разобрано в docs/agent-tasks.md 2.4).
-    if norm_with_fact(body) and not PROVENANCE_TAGS_RE.search(body):
-        issues.append('advisory: no provenance-tag found while referencing norms/sources')
+    issues.extend(provenance_issues(body, body, label='SKILL.md'))
 
     # Consequential-gate: если навык описывает takedown/c&e/подача —
     # должно быть указание, что делает человек
@@ -184,26 +183,78 @@ def mentions_sources(body: str) -> bool:
 # «10 рабочих дней (ст. 20 152-ФЗ)»). Именно такие утверждения требуют тега
 # происхождения (правило 3 AGENTS.md); простая ссылка-ориентир — нет.
 NORM_RE = r'(?:ст\.|ГК|ТК|АПК|ГПК|КАС|КоАП|НК|ФЗ-?\d+|Пленум)'
-FACT_RE = (r'(?:\d+\s*(?:рабоч|календарн|дн|час|месяц|лет|год|%)'
+FACT_RE = (r'(?:\d+(?:[/–-]\d+)?\s*(?:рабоч|календарн|дн|час|ч(?![.\w])|месяц|лет|год|%)'
            r'|(?:от|до|более|менее)\s*\d[\d\s]{3,}|\d+\s*(?:млн|тыс|руб))')
+# Правовое ПОСЛЕДСТВИЕ — тоже проверяемый факт: утверждение «сделка оспорима по
+# ст. 174 ГК» так же требует источника, как и срок (задача A2 плана 27.09.2026).
+# Список узкий намеренно: «обязан», «вправе», «подлежит» в обыденном тексте
+# встречаются постоянно («разбор обязан сказать это явно») и давали ложные
+# срабатывания — оставлены только термины с правовым смыслом.
+CONSEQUENCE_RE = (r'(?:оспорим|недействительн|ничтожн|недопустим|запрещен|'
+                  r'влеч[её]т|влекут|призна[её]тся недействительн|'
+                  r'наступает ответственность|освобожда[ею]тся от ответственности)')
 NORM_FACT_RE = re.compile(
-    rf'(?:^|[^\w]){NORM_RE}(?=[^\n]{{0,120}}{FACT_RE})'   # норма, а в той же строке — число
-    rf'|{FACT_RE}[^\n]{{0,80}}?(?:^|[^\w]){NORM_RE}'      # число, а после — норма
+    # норма, а дальше в строке — число или последствие
+    rf'(?:^|[^\w]){NORM_RE}(?=[^\n]{{0,120}}(?:{FACT_RE}|{CONSEQUENCE_RE}))'
+    # число или последствие, а дальше — норма
+    rf'|(?:{FACT_RE}|{CONSEQUENCE_RE})[^\n]{{0,80}}?(?:^|[^\w]){NORM_RE}'
     , re.M
 )
 
 
-def norm_with_fact(body: str) -> bool:
-    """Строка, где норма приводится вместе с числовым фактом.
+def norm_with_fact(body: str, paragraph: bool = False) -> bool:
+    """Норма рядом с конкретным фактом: числом (срок, порог, сумма) или
+    правовым последствием (оспорима, недействительна, недопустима).
 
-    Примеры речи пользователя («по ст. 14.3 КоАП столько-то») и цитаты в
-    «ёлочках» утверждениями репозитория не являются — тега не требуют.
+    Проверяется сначала строка, затем абзац: в справочниках норма и вывод о
+    последствии часто стоят на разных строках одного пункта («- **Директор в
+    реестре дисквалифицированных** — дисквалификация (ст. 3.11 КоАП) лишает
+    права занимать должности… Сделка… **оспорима** (ст. 174 ГК)»). Построчная
+    проверка видела только 2 справочника из 19 — абзацная видит реальные
+    утверждения. Примеры речи пользователя («по ст. 14.3 КоАП столько-то») и
+    цитаты в «ёлочках» утверждениями репозитория не являются.
     """
-    for line in body.splitlines():
+    lines = body.splitlines()
+    for line in lines:
         m = NORM_FACT_RE.search(line)
         if m and not _inside_quotes(line, m.start()):
             return True
+    # Абзацный проход: норма и факт в одном пункте, но на разных строках
+    # (перенос внутри пункта). Разбиваем по границам пунктов, а не только по
+    # пустым строкам: иначе склеиваются соседние пункты списка и в «один
+    # абзац» попадает норма из одного пункта и число из другого — так
+    # проверка ловила `closing-checklist` и `bar-prep-questions` на ровном месте.
+    #
+    # Только для справочников (`paragraph=True`): у SKILL.md сложившийся режим
+    # «строка с нормой и фактом» (вычищен до 0 в задаче 2.4), и менять его
+    # нельзя — иначе возвращаются десятки advisories на живых навыках.
+    if not paragraph:
+        return False
+    unit = re.compile(r'\n(?=\s*(?:[-*+]|\d+[.)])\s)')
+    for para in unit.split(body):
+        if not re.search(NORM_RE, para):
+            continue
+        flat = re.sub(r'\s+', ' ', para)
+        m = NORM_FACT_RE.search(flat)
+        if m and not _inside_quotes(flat, m.start()):
+            return True
     return False
+
+
+def provenance_issues(body: str, whole: str, label: str = 'SKILL.md',
+                      paragraph: bool = False) -> List[str]:
+    """Тег источника нужен, если норма приведена с конкретным фактом.
+
+    `whole` — весь текст файла (тег может стоять в другом месте), `body` —
+    проверяемая часть. Для SKILL.md это один и тот же текст; для справочников
+    `references/*.md` вызывается отдельно, потому что там нормы живут в
+    таблицах и в списках красных флагов, а тег ставится рядом с утверждением.
+    `paragraph=True` дополнительно склеивает пункт, разбитый переносом строки
+    (у справочников норма и последствие часто стоят на соседних строках).
+    """
+    if norm_with_fact(body, paragraph=paragraph) and not PROVENANCE_TAGS_RE.search(whole):
+        return [f'advisory: no provenance-tag found while referencing norms/sources ({label})']
+    return []
 
 
 # --- проверка заявлений о составе и лицензии (--claims) -----------------------
@@ -610,8 +661,26 @@ def validate_all() -> int:
         dom = parts[0] if parts[0] != 'skills' else 'root'
         counts[dom] = counts.get(dom, 0) + 1
 
+    # Provenance в справочниках навыков (`*/skills/*/references/*.md`).
+    # Задача A2 плана от 27.09.2026: 15 справочников vector-check (~2100 строк
+    # правового текста) были написаны без единого тега источника, и валидатор
+    # их не видел. Шаг 3 задачи: после разбора advisories в справочниках — 0,
+    # поэтому здесь это ОШИБКА, а не advisory. Иначе новые справочники снова
+    # пойдут без источников, а агент по DD примет их за проверенные нормы.
+    refs_checked = 0
+    for ref in sorted(root.rglob('references/*.md')):
+        rel = str(ref.relative_to(root))
+        if '/skills/' not in rel or rel.startswith('skills/'):
+            continue
+        text = ref.read_text(encoding='utf-8')
+        refs_checked += 1
+        issues = provenance_issues(text, text, label=ref.name, paragraph=True)
+        if issues:
+            all_errors.append((rel, [i.replace('advisory: ', 'ERROR: ') for i in issues]))
+
     print(f'=== Vector Legal validation ===')
     print(f'  SKILL.md total: {total}')
+    print(f'  references/*.md total: {refs_checked}')
     for d, n in sorted(counts.items(), key=lambda x: -x[1] if x[0] != 'root' else 0):
         print(f'    {d}: {n}')
     print(f'  Errors: {len(all_errors)} | Advisories: {len(all_warnings)}')

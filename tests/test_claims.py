@@ -474,6 +474,57 @@ def main() -> int:
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
+    # 6g. Provenance в справочниках skills/*/references/*.md: норма с фактом
+    #     без тега — ОШИБКА (задача A2 плана 27.09.2026: 15 справочников
+    #     vector-check были написаны без единого тега, валидатор их не видел;
+    #     после разбора advisories в справочниках стало 0, поэтому проверка
+    #     переведена в ошибки — иначе новые справочники снова пойдут без
+    #     источников). Тело навыка берём русское: иначе валидатор падает
+    #     раньше по правилу «<5 кириллических знаков».
+    RU_BODY = 'Проверка реестров и судебных дел для контрагента.\n'
+    tmp = pathlib.Path(tempfile.mkdtemp())
+    try:
+        make_repo(tmp, readme=GOOD_README, skill_body=RU_BODY, extra_files={
+            'demo-legal/skills/skill-0/references/99-test.md':
+                '# Тест\n\n| Норма | Что |\n|---|---|\n| ст. 30 ФЗ-14 | сделка оспорима (ст. 174 ГК) |\n'})
+        r = subprocess.run([sys.executable, str(tmp / 'scripts' / 'validate.py')],
+                           cwd=tmp, capture_output=True, text=True)
+        bad = 'no provenance-tag' not in r.stdout or r.returncode != 1
+        print(('FAIL  ' if bad else 'ok    ') + 'справочник: норма с фактом без тега — ошибка')
+        results.append(not bad)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 6h. Тот же справочник с тегом — чисто.
+    tmp = pathlib.Path(tempfile.mkdtemp())
+    try:
+        make_repo(tmp, readme=GOOD_README, skill_body=RU_BODY, extra_files={
+            'demo-legal/skills/skill-0/references/99-test.md':
+                '# Тест\n\n| Норма | Что |\n|---|---|\n| ст. 30 ФЗ-14 | сделка оспорима (ст. 174 ГК) '
+                '`[settled — подтверждено 2026-09-27, КонсультантПлюс]` |\n'})
+        r = subprocess.run([sys.executable, str(tmp / 'scripts' / 'validate.py'), '--warnings'],
+                           cwd=tmp, capture_output=True, text=True)
+        bad = 'no provenance-tag' in r.stdout
+        print(('FAIL  ' if bad else 'ok    ') + 'справочник: норма с фактом и тегом — чисто')
+        results.append(not bad)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 6i. Справочник с числом навыков не ломает проверку состава (references
+    #     не участвуют в подсчёте) и не даёт ложного «N навыков».
+    tmp = pathlib.Path(tempfile.mkdtemp())
+    try:
+        make_repo(tmp, readme=GOOD_README, skill_body=RU_BODY, extra_files={
+            'demo-legal/skills/skill-0/references/99-test.md':
+                '# Тест\n\nВ домене 999 навыков.\n'})
+        r = subprocess.run([sys.executable, str(tmp / 'scripts' / 'validate.py'), '--claims'],
+                           cwd=tmp, capture_output=True, text=True)
+        bad = '999 навык' in r.stdout
+        print(('FAIL  ' if bad else 'ok    ') + 'справочник: произвольное число не считается заявлением')
+        results.append(not bad)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
     ok = sum(results)
     print(f'\n{ok}/{len(results)} тестов прошло')
     return 0 if ok == len(results) else 1
