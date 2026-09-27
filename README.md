@@ -91,8 +91,9 @@ git clone https://github.com/Osmosy/vector-legal.git
 
 ## Агенты мониторинга
 
-Пять cron-спек в `cookbooks/<агент>/cron-spec.yaml` (подробно —
-[cookbooks/README.md](cookbooks/README.md)):
+Пять агентов: спецификации — `cookbooks/<агент>/cron-spec.yaml` (подробно —
+[cookbooks/README.md](cookbooks/README.md)), они же оформлены как реальные
+задачи `hermes cron` (`hermes cron list`, отчёты — в `out/<агент>/`):
 
 | Агент | Домен | Что отслеживает | Расписание |
 |-------|-------|----------------|-----------|
@@ -101,6 +102,11 @@ git clone https://github.com/Osmosy/vector-legal.git
 | docket-watcher | litigation-legal | Судебные дела: kad.arbitr.ru, sudrf.ru — новые акты, заседания, дедлайны | ежедневно 08:00 |
 | launch-radar | product-legal | Запуски продуктов по 9-категорийному фреймворку | пн 10:00 |
 | diligence-grid | corporate-legal | Dataroom при сделке: новые загрузки и табличная ревизия | по запросу |
+
+Все задачи работают с `deliver: local` и минимальным toolset: отчёт
+сохраняется в `out/<агент>/` и ждёт человеческой ревизии, наружу ничего не
+отправляется. Удалённые задачи удаляются `hermes cron remove <job_id>`, пауза —
+`hermes cron pause <job_id>`.
 
 Сроки отпусков и больничных ведёт не cron-агент, а навыки
 `employment-legal/skills/leave-tracker` и `log-leave`.
