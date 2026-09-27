@@ -87,37 +87,42 @@ guardrails`, `## Outputs`). Блоки канонизируются там; ес
 
 ### Шаг 2 — Углубление (Standard / Full)
 
-Объём по каждому из 12 доменов — таблица «Глубина» ниже. Подробные
-инструкции (источники, что извлекать, как форматировать) есть для двух
-доменов с наибольшим весом в РФ-практике:
+Объём по каждому из 12 доменов — таблица «Глубина» ниже. Для **каждого**
+домена есть reference с источниками по tier, что извлекать и как оформлять
+раздел отчёта. Имя файла = номер домена в таблице «Глубина»:
 
 | Домен таблицы | Reference |
 |---|---|
-| 02 Реестры (+ бенефициары, суды, ФССП, банкротство, ГИР БО) | `references/01-registries-RF.md` |
-| 07 Санкции + PEP | `references/02-sanctions.md` |
-| API-обогащение по реестрам (DataNewton) | `references/03-datanewton-api.md` + `references/datanewton-api-openapi-schema.json` |
-
-Для остальных доменов (сайт, финансы, VDR, кибер, ESG, OSINT, контент,
-медиа, юр, тех/опс) отдельного reference нет: объём — по таблице «Глубина»,
-источники — по общим знаниям с тегом `[model knowledge — verify]` и явной
-пометкой в Reviewer note, что домен собран без чеклиста.
+| 01 Сайт | `references/01-website.md` |
+| 02 Реестры (+ бенефициары, суды, ФССП, банкротство, ГИР БО) | `references/02-registries-RF.md` |
+| 03 Финансы | `references/03-financial.md` |
+| 04 VDR/AI | `references/04-vdr-ai.md` |
+| 05 Кибер + данные | `references/05-cyber.md` |
+| 06 ESG | `references/06-esg.md` |
+| 07 Санкции + PEP | `references/07-sanctions.md` |
+| 08 OSINT | `references/08-osint.md` |
+| 09 Контент | `references/09-content.md` |
+| 10 Медиа | `references/10-media.md` |
+| 11 Юр | `references/11-legal.md` |
+| 12 Тех/опс | `references/12-tech-ops.md` |
+| API-обогащение по реестрам (не домен, инструмент) | `references/13-datanewton-api.md` + `references/datanewton-api-openapi-schema.json` |
 
 **Standard** = все 12 доменов в базовом объёме + юрисдикционный анализ (шаг 3).
 **Full** = все 12 доменов глубоко + VDR (если есть) + Q&A + интервью + мониторинг.
 
 ### Шаг 3 — Юрисдикционный глубокий анализ
 
-После сбора общих данных — юрисдикционный проход. Для России он описан в
-`references/01-registries-RF.md` (ЕГРЮЛ deep dive, бенефициары, 115-ФЗ,
-ГИР БО, массовый адрес, реестр дисквалификации, ОКВЭД, лицензии). Для
-других юрисдикций reference-файлов нет — чек-лист ниже, каждый факт с
-`[model knowledge — verify]` или тегом первоисточника:
+После сбора общих данных — юрисдикционный проход. Для каждой юрисдикции есть
+reference: реестры, обязательные проверки, формат раздела отчёта.
 
-- **EU** — национальные реестры (Unternehmensregister и аналоги), CSRD/CSDDD, GDPR, DG Comp
-- **US** — SEC EDGAR (10-K), PACER, OFAC (правило 50%), ITAR/EAR, реестры штатов
-- **UK** — Companies House + PSC, OFSI, FCA, Modern Slavery Act
-- **Китай** — GSXT, статус госпредприятия, PIPL, Negative List
-- **Трансгранично** — OpenCorporates, OpenSanctions, BEPS / CbCR
+| Юрисдикция | Reference |
+|---|---|
+| Россия | `references/02-registries-RF.md` (ЕГРЮЛ deep dive, бенефициары, 115-ФЗ, ГИР БО, массовый адрес, дисквалификация, ОКВЭД, лицензии) |
+| EU | `references/20-jurisdiction-eu.md` |
+| US | `references/21-jurisdiction-us.md` |
+| UK | `references/22-jurisdiction-uk.md` |
+| Китай | `references/23-jurisdiction-china.md` |
+| Трансгранично | `references/24-jurisdiction-cross-border.md` |
 
 ### Шаг 4 — Синтез и отчёт
 
@@ -236,7 +241,8 @@ memory(
 - [ ] Шаг 0 scoping завершён (цель, тип сделки, глубина, юрисдикция, язык, путь сохранения)
 - [ ] Express-уровень собран (шаги 1-10) — для любой глубины
 - [ ] Дополнительные домены добавлены согласно уровню глубины
-- [ ] Юрисдикционный проход выполнен (РФ — `references/01-registries-RF.md`)
+- [ ] Юрисдикционный проход выполнен (`references/02-registries-RF.md` для РФ;
+      `20`–`24` для EU/US/UK/Китай/трансгранично)
 - [ ] Отчёт соответствует структуре из шага 4
 - [ ] Severity расставлен (CRITICAL / HIGH / MEDIUM / LOW)
 - [ ] Источники процитированы явно
