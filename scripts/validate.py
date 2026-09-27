@@ -28,10 +28,10 @@ REPO = pathlib.Path(__file__).parent.parent
 KIRILL_RE = re.compile(r'[а-яё]', re.I)
 PITFALL_RE = re.compile(r'^##\s.*[Pp]itfall', re.M)
 PROVENANCE_TAGS_RE = re.compile(
-    r'\[(?:kad\.arbitr\.ru|pravo\.gov\.ru|ФИПС|КонсультантПлюс|user\s+provided|'
+    r'\[\s*(?:kad\.arbitr\.ru|pravo\.gov\.ru|ФИПС|КонсультантПлюс|user\s+provided|'
     r'model\s+knowledge\s*[—-]\s*verify|web\s+search\s*[—-]\s*verify|'
     r'settled\s*[—-]*\s*подтверждено|egrul\.nalog\.ru|sudrf\.ru|fedresurs\.ru|'
-    r'sudact\.ru|regulation\.gov\.ru|СИПН|vsrf\.ru)\]'
+    r'sudact\.ru|regulation\.gov\.ru|СИПН|vsrf\.ru)[^\]]*\]'
 )
 REVIEWER_NOTE_RE = re.compile(r'⚠️\s*Reviewer\s+note', re.I)
 DECISION_TREE_RE = re.compile(r'Что\s+дальше\?|Decision\s+tree', re.I)
@@ -70,8 +70,11 @@ def validate_frontmatter(s: str) -> List['str']:
         issues.append('no `description`')
     elif len(str(desc)) > 1024:
         issues.append(f'description is {len(str(desc))} chars (max 1024)')
-    # argument-hint: advisory
-    if 'argument-hint' not in fm:
+    # argument-hint: advisory. Требуем только у навыков, которые пользователь
+    # вызывает напрямую: у `user-invocable: false` (reference-навыки, их
+    # загружают другие навыки) подсказка аргументов бессмысленна — дефект,
+    # из-за которого проверка шумела на них, описан в docs/agent-tasks.md 2.4.
+    if 'argument-hint' not in fm and fm.get('user-invocable', True) is not False:
         issues.append('advisory: missing argument-hint')
     return issues
 
@@ -102,8 +105,13 @@ def check_skill(path: pathlib.Path) -> List['str']:
     if cyrillic < 100 and len(body) > 2000:
         issues.append(f'body very low on Russian (only {cyrillic} cyrillic chars in {len(body)}-byte body)')
 
-    # Provenance в теле (если упоминает суды/закон/базу — ожидается тег)
-    if mentions_sources(body) and not PROVENANCE_TAGS_RE.search(body):
+    # Provenance в теле. Требуем тег только там, где норма приводится с
+    # конкретным проверяемым фактом (срок, порог, сумма, процент): ссылка-
+    # ориентир («см. ст. 15 ГК») тега не требует — правило 3 AGENTS.md про
+    # цитаты и факты, а не про любые упоминания статей. Прежняя версия шумела
+    # на 46 навыках, где статей много, а собственных утверждений о числах нет
+    # (разобрано в docs/agent-tasks.md 2.4).
+    if norm_with_fact(body) and not PROVENANCE_TAGS_RE.search(body):
         issues.append('advisory: no provenance-tag found while referencing norms/sources')
 
     # Consequential-gate: если навык описывает takedown/c&e/подача —
@@ -115,11 +123,43 @@ def check_skill(path: pathlib.Path) -> List['str']:
            and 'gate' not in body.lower():
             issues.append('advisory: consequential-skill, verify practice-profile controls')
 
-    # Placeholder count: [PLACEHOLDER] — это ожидаемо в шаблоне, но не в теле
-    # навыков (только в CLAUDE.md). Если найдены в SKILL.md — предупредить
-    if '[PLACEHOLDER]' in body:
+    # Placeholder: [PLACEHOLDER] ожидаем в шаблоне practice profile (CLAUDE.md),
+    # но не в теле навыков. Упоминание самого маркера в тексте инструкции
+    # («если профиль содержит [PLACEHOLDER]») — не дефект: навык объясняет
+    # пользователю, на что смотреть. Дефект — маркер, который остался
+    # незаполненным в выдаваемом тексте. Поэтому считаем вхождения вне
+    # бэктиков и вне пояснительных оборотов (разобрано в docs/agent-tasks.md 2.4).
+    placeholder_hits = [
+        m for m in re.finditer(r'\[PLACEHOLDER', body)
+        if not _inside_backticks(body, m.start())
+        # «...» — пример речи пользователя или цитата, а не утверждение репо
+        and not _inside_quotes(body, m.start())
+        and not re.search(r'(?:если|содержит|есть|найден|остал|вписать|поставить|заполнить|flag|warning)'
+                          r'[^\n]{0,60}$', body[max(0, m.start() - 90):m.start()], re.I)
+        # «Нет или [PLACEHOLDER] →» — тоже условие проверки, не дефект
+        and not re.search(r'(?:Нет|или|что черновик)\s*(?:или\s*)?$',
+                          body[max(0, m.start() - 20):m.start()], re.I)
+    ]
+    if placeholder_hits:
         issues.append('WARNING: [PLACEHOLDER] в SKILL.md — advisory only')
     return issues
+
+
+def _inside_quotes(text: str, pos: int) -> bool:
+    """Позиция внутри «ёлочек» — пример речи пользователя или цитата, а не
+    утверждение самого репозитория, поэтому тег происхождения не нужен."""
+    for m in re.finditer(r'«[^»\n]{1,400}»', text):
+        if m.start() <= pos < m.end():
+            return True
+    return False
+
+
+def _inside_backticks(text: str, pos: int) -> bool:
+    """Позиция внутри `кода` — там маркер упоминается, а не стоит незаполненным."""
+    for m in re.finditer(r'`[^`\n]*`', text):
+        if m.start() <= pos < m.end():
+            return True
+    return False
 
 
 def frontmatter_name(s: str):
@@ -137,6 +177,33 @@ def frontmatter_name(s: str):
 def mentions_sources(body: str) -> bool:
     """Тело упоминает нормативные акты / судебную практику."""
     return bool(re.search(r'\b(ст\.|ГК|ТК|АПК|ГПК|КАС|КоАП|НК|ФЗ|Пленум|152-ФЗ|44-ФЗ)\b', body))
+
+
+# Норма + конкретный проверяемый факт в одной строке: срок, порог, сумма,
+# процент — в любом порядке (часто число стоит перед ссылкой на статью:
+# «10 рабочих дней (ст. 20 152-ФЗ)»). Именно такие утверждения требуют тега
+# происхождения (правило 3 AGENTS.md); простая ссылка-ориентир — нет.
+NORM_RE = r'(?:ст\.|ГК|ТК|АПК|ГПК|КАС|КоАП|НК|ФЗ-?\d+|Пленум)'
+FACT_RE = (r'(?:\d+\s*(?:рабоч|календарн|дн|час|месяц|лет|год|%)'
+           r'|(?:от|до|более|менее)\s*\d[\d\s]{3,}|\d+\s*(?:млн|тыс|руб))')
+NORM_FACT_RE = re.compile(
+    rf'(?:^|[^\w]){NORM_RE}(?=[^\n]{{0,120}}{FACT_RE})'   # норма, а в той же строке — число
+    rf'|{FACT_RE}[^\n]{{0,80}}?(?:^|[^\w]){NORM_RE}'      # число, а после — норма
+    , re.M
+)
+
+
+def norm_with_fact(body: str) -> bool:
+    """Строка, где норма приводится вместе с числовым фактом.
+
+    Примеры речи пользователя («по ст. 14.3 КоАП столько-то») и цитаты в
+    «ёлочках» утверждениями репозитория не являются — тега не требуют.
+    """
+    for line in body.splitlines():
+        m = NORM_FACT_RE.search(line)
+        if m and not _inside_quotes(line, m.start()):
+            return True
+    return False
 
 
 # --- проверка заявлений о составе и лицензии (--claims) -----------------------

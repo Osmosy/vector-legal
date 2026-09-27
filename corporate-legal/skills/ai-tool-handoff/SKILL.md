@@ -6,6 +6,7 @@ description: >
   QA-слой по trust-уровню из practice profile. Используй при «отправить в
   Kira», «bulk ревью», «AI экстракция», или когда diligence-issue-extraction
   упёрлась в высокообъёмную категорию.
+argument-hint: '[пакет документов или категория для bulk-ревью]'
 ---
 
 # AI Tool Handoff — передача bulk-ревью
