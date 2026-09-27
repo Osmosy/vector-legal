@@ -31,7 +31,9 @@ prompt: |
      5. ПДн 152-ФЗ
      6. Телематика ФЗ-126 / лицензии ФСБ-Россвязь
      7. Платежи ФЗ-161/115/54-ФЗ
-     8. ИИ/алгоритмы (10.2-10.3 ФЗ-149, ГОСТ 59276, ЭПР)
+     8. ИИ/алгоритмы (рекомендательные системы — ст. 10.2-2 ФЗ-149
+        [settled — подтверждено 2026-09-27, КонсультантПлюс: 149-ФЗ ред. 26.06.2026];
+        ГОСТ Р 59276, ЭПР)
      9. Санкционный контур / экспорт
   3. Для каждой категории: REQUIRED (must-have) vs ADVISABLE vs N/A.
      REQUIRED-пробел = 🔴 (блокирует запуск).
@@ -46,7 +48,7 @@ enabled_toolsets: ["terminal", "read"]
 deliver: "origin"
 
 verification:
-  acceptance: "репорт в ~/.hermes/legal/product-legal/outputs/launch-radar/<date>.md с категорией-таблицей и REQUIRED/ADVISABLE/N/A флагами"
+  acceptance: "репорт out/launch-radar/<date>.md с категорией-таблицей и REQUIRED/ADVISABLE/N/A флагами"
   method: "schema_check"
 escalation:
   on_ambiguous: "challenge_delegator"

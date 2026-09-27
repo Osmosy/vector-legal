@@ -525,6 +525,89 @@ def main() -> int:
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 
+    # 6j. L5 (27.09.2026): тег источника засчитывается не на весь файл, а на
+    #     пункт. Было: один тег вверху снимал требование со всех утверждений
+    #     ниже — проверка давала ложное ощущение надёжности. Проверено на
+    #     дереве: тег в начале 05-cyber.md закрывал утверждение про 24/72 ч
+    #     (ч. 3.1 ст. 21) в конце файла.
+    tmp = pathlib.Path(tempfile.mkdtemp())
+    try:
+        make_repo(tmp, readme=GOOD_README, skill_body=RU_BODY, extra_files={
+            'demo-legal/skills/skill-0/references/99-test.md':
+                '# Тест\n\nОриентир `[settled — подтверждено 2026-09-27, КонсультантПлюс]`.\n\n'
+                '- **Утечка ПДн** — уведомить РКН в 24/72 ч (ч. 3.1 ст. 21 152-ФЗ)\n'})
+        r = subprocess.run([sys.executable, str(tmp / 'scripts' / 'validate.py')],
+                           cwd=tmp, capture_output=True, text=True)
+        bad = 'no provenance-tag' not in r.stdout or r.returncode != 1
+        print(('FAIL  ' if bad else 'ok    ') + 'тег на весь файл не закрывает утверждение в другом пункте')
+        results.append(not bad)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 6k. Тот же текст, но тег стоит рядом с утверждением — чисто.
+    tmp = pathlib.Path(tempfile.mkdtemp())
+    try:
+        make_repo(tmp, readme=GOOD_README, skill_body=RU_BODY, extra_files={
+            'demo-legal/skills/skill-0/references/99-test.md':
+                '# Тест\n\n- **Утечка ПДн** — уведомить РКН в 24/72 ч (ч. 3.1 ст. 21 152-ФЗ) '
+                '`[settled — подтверждено 2026-09-27, КонсультантПлюс]`\n'})
+        r = subprocess.run([sys.executable, str(tmp / 'scripts' / 'validate.py')],
+                           cwd=tmp, capture_output=True, text=True)
+        bad = 'no provenance-tag' in r.stdout
+        print(('FAIL  ' if bad else 'ok    ') + 'тег в том же пункте — чисто')
+        results.append(not bad)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 6l. L1: промпт cron-спеки проверяется как правовой текст — норма с фактом
+    #     без тега падает. Живой случай: ст. 36 ФЗ-14 в промпте renewal-watcher.
+    tmp = pathlib.Path(tempfile.mkdtemp())
+    try:
+        make_repo(tmp, readme=GOOD_README, skill_body=RU_BODY, extra_files={
+            'cookbooks/demo/cron-spec.yaml':
+                'schedule: "0 9 * * 1"\nname: demo\nworkdir: "~/projects/vector-legal"\n'
+                'prompt: |\n  Ты — агент. Репорт в out/demo/<date>.md.\n'
+                '  Срок уведомления о расторжении: 30 дней (п. 1 ст. 36 ФЗ-14).\n'})
+        r = subprocess.run([sys.executable, str(tmp / 'scripts' / 'validate.py')],
+                           cwd=tmp, capture_output=True, text=True)
+        bad = 'no provenance-tag' not in r.stdout or r.returncode != 1
+        print(('FAIL  ' if bad else 'ok    ') + 'L1: промпт спеки — норма с фактом без тега падает')
+        results.append(not bad)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 6m. L2: путь приёмки обязан совпадать с путём отчёта в промпте.
+    tmp = pathlib.Path(tempfile.mkdtemp())
+    try:
+        make_repo(tmp, readme=GOOD_README, skill_body=RU_BODY, extra_files={
+            'cookbooks/demo/cron-spec.yaml':
+                'schedule: "0 8 * * *"\nname: demo\nworkdir: "~/projects/vector-legal"\n'
+                'prompt: |\n  Ты — агент. Репорт в out/demo/<date>.md.\n'
+                'verification:\n  acceptance: "репорт в ~/.hermes/legal/demo-legal/outputs/demo/<date>.md"\n'})
+        r = subprocess.run([sys.executable, str(tmp / 'scripts' / 'validate.py')],
+                           cwd=tmp, capture_output=True, text=True)
+        bad = 'путь приёмки' not in r.stdout or r.returncode != 1
+        print(('FAIL  ' if bad else 'ok    ') + 'L2: расхождение пути приёмки и пути отчёта падает')
+        results.append(not bad)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 6n. Совпадающие пути — чисто.
+    tmp = pathlib.Path(tempfile.mkdtemp())
+    try:
+        make_repo(tmp, readme=GOOD_README, skill_body=RU_BODY, extra_files={
+            'cookbooks/demo/cron-spec.yaml':
+                'schedule: "0 8 * * *"\nname: demo\nworkdir: "~/projects/vector-legal"\n'
+                'prompt: |\n  Ты — агент. Репорт в out/demo/<date>.md.\n'
+                'verification:\n  acceptance: "репорт out/demo/<date>.md с полями"\n'})
+        r = subprocess.run([sys.executable, str(tmp / 'scripts' / 'validate.py')],
+                           cwd=tmp, capture_output=True, text=True)
+        bad = 'путь приёмки' in r.stdout
+        print(('FAIL  ' if bad else 'ok    ') + 'L2: совпадающие пути — чисто')
+        results.append(not bad)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
     ok = sum(results)
     print(f'\n{ok}/{len(results)} тестов прошло')
     return 0 if ok == len(results) else 1
