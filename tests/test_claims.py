@@ -24,7 +24,8 @@ def make_repo(tmp: pathlib.Path, *, skills: int = 3, readme: str = '', agents: s
               agent_description: str = '', license_text: str = 'MIT License\n\nCopyright (c) 2026 Osmosy\n',
               domain_readme: str | None = None, domains_status: str = '',
               list_skills: bool = True, skill_body: str = 'тело\n',
-              extra_files: dict[str, str | bytes] | None = None) -> pathlib.Path:
+              extra_files: dict[str, str | bytes] | None = None,
+              claim_docs: dict[str, str] | None = None) -> pathlib.Path:
     """Синтетический репозиторий: skills файлы + документы с заявлениями.
 
     ВАЖНО: validate.py определяет корень репозитория как `__file__.parent.parent`,
@@ -56,6 +57,11 @@ def make_repo(tmp: pathlib.Path, *, skills: int = 3, readme: str = '', agents: s
             agent_description.format(total=total), encoding='utf-8')
     if domains_status:
         (tmp / 'domains-status.md').write_text(domains_status, encoding='utf-8')
+    if claim_docs:
+        for rel, content in claim_docs.items():
+            p = tmp / rel
+            p.parent.mkdir(parents=True, exist_ok=True)
+            p.write_text(content, encoding='utf-8')
     if domain_readme is not None:
         text = domain_readme.format(skills=skills)
         if list_skills:  # доменный README обязан называть каждый навык
@@ -396,6 +402,74 @@ def main() -> int:
                            cwd=tmp, capture_output=True, text=True)
         bad = 'missing argument-hint' not in r.stdout
         print(('FAIL  ' if bad else 'ok    ') + 'hint убран у вызываемого навыка — предупреждение')
+        results.append(not bad)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 6b. CLAUDE.md (шаблон практики) участвует в проверке лицензии адаптации:
+    #     англоязычная строка «adaptation of … Apache-2.0» при MIT — ошибка.
+    tmp = pathlib.Path(tempfile.mkdtemp())
+    try:
+        make_repo(tmp, readme=GOOD_README, claim_docs={
+            'corporate-legal/CLAUDE.md':
+                '*Перезапуск: `cold-start-interview --redo`. Шаблон по умолчанию\n'
+                '(adaptation of commercial-legal/CLAUDE.md, Apache-2.0).*\n'})
+        r = subprocess.run([sys.executable, str(tmp / 'scripts' / 'validate.py'), '--claims'],
+                           cwd=tmp, capture_output=True, text=True)
+        bad = 'LICENSE — MIT' not in r.stdout
+        print(('FAIL  ' if bad else 'ok    ') + 'CLAUDE.md: adaptation … Apache-2.0 при MIT — ошибка')
+        results.append(not bad)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 6c. Атрибуция апстрима (Anthropic, Apache-2.0) — законна, ошибкой не считается.
+    tmp = pathlib.Path(tempfile.mkdtemp())
+    try:
+        make_repo(tmp, readme=GOOD_README, claim_docs={
+            'AGENTS.md': 'Скелет: claude-for-legal © Anthropic, Apache-2.0 (апстрим).\n'})
+        r = subprocess.run([sys.executable, str(tmp / 'scripts' / 'validate.py'), '--claims'],
+                           cwd=tmp, capture_output=True, text=True)
+        bad = 'LICENSE — MIT' in r.stdout
+        print(('FAIL  ' if bad else 'ok    ') + 'атрибуция «© Anthropic, Apache-2.0» — не ошибка')
+        results.append(not bad)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 6d. Заявление о числе навыков в CLAUDE.md сверяется с деревом.
+    tmp = pathlib.Path(tempfile.mkdtemp())
+    try:
+        make_repo(tmp, readme=GOOD_README, claim_docs={
+            'corporate-legal/CLAUDE.md': 'В домене 999 навыков.\n'})
+        r = subprocess.run([sys.executable, str(tmp / 'scripts' / 'validate.py'), '--claims'],
+                           cwd=tmp, capture_output=True, text=True)
+        bad = '999 навык' not in r.stdout
+        print(('FAIL  ' if bad else 'ok    ') + 'CLAUDE.md: «999 навыков» против дерева — ошибка')
+        results.append(not bad)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 6e. Верное число в CLAUDE.md ошибкой не считается.
+    tmp = pathlib.Path(tempfile.mkdtemp())
+    try:
+        make_repo(tmp, readme=GOOD_README, claim_docs={
+            'corporate-legal/CLAUDE.md': 'В домене {total} навыков.\n'.format(total=4)})
+        r = subprocess.run([sys.executable, str(tmp / 'scripts' / 'validate.py'), '--claims'],
+                           cwd=tmp, capture_output=True, text=True)
+        bad = 'навык' in r.stdout and 'LICENSE' in r.stdout
+        print(('FAIL  ' if bad else 'ok    ') + 'CLAUDE.md: верное число навыков — чисто')
+        results.append(not bad)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # 6f. Отчёт, цитирующий дефект в «ёлочках», ошибкой не считается.
+    tmp = pathlib.Path(tempfile.mkdtemp())
+    try:
+        make_repo(tmp, readme=GOOD_README, claim_docs={
+            'docs/report.md': 'Исправлено: «Адаптация … Apache-2.0» → MIT (слайды 1, 12).\n'})
+        r = subprocess.run([sys.executable, str(tmp / 'scripts' / 'validate.py'), '--claims'],
+                           cwd=tmp, capture_output=True, text=True)
+        bad = 'LICENSE — MIT' in r.stdout
+        print(('FAIL  ' if bad else 'ok    ') + 'цитата дефекта в «ёлочках» — не ошибка')
         results.append(not bad)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)

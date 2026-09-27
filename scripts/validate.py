@@ -341,13 +341,19 @@ def check_claims(root: pathlib.Path) -> List[str]:
             f'апстрим: разные числа навыков в документации ({detail}); сверка — '
             f'gh api repos/anthropics/claude-for-legal/git/trees/main?recursive=1')
 
-    # 6. Свободный поиск: незаякоренные «N навыков» в CLAIM_FILES. Сравниваются с
-    #    нашим числом, если рядом нет упоминания апстрима; если есть — идут в
-    #    апстрим-набор и ловят расхождение с якорями.
-    for name in CLAIM_FILES:
-        path = root / name
+    # 6. Свободный поиск: незаякоренные «N навыков» в CLAIM_FILES и в CLAUDE.md
+    #    (шаблонах практики: они копируются в ~/.hermes/legal/<домен>/CLAUDE.md
+    #    и оттуда тиражируют число во все выходы). Сравниваются с нашим числом,
+    #    если рядом нет упоминания апстрима; если есть — идут в апстрим-набор и
+    #    ловят расхождение с якорями.
+    claim_docs = [root / name for name in CLAIM_FILES]
+    for claude_md in sorted(root.rglob('CLAUDE.md')):
+        if '.git' not in claude_md.parts and claude_md not in claim_docs:
+            claim_docs.append(claude_md)
+    for path in claim_docs:
         if not path.is_file():
             continue
+        name = str(path.relative_to(root))
         text = path.read_text(encoding='utf-8')
         own_pos, _ = _anchored(text, OWN_ANCHORS)
         up_pos, _ = _anchored(text, UPSTREAM_ANCHORS)
@@ -387,7 +393,20 @@ def check_claims(root: pathlib.Path) -> List[str]:
     #    © Osmosy, MIT (см. LICENSE)»), поэтому текст склеивается в одну строку,
     #    а якорь — пара «Адаптация … Osmosy … <лицензия>». Лицензии чужих работ
     #    («© Anthropic, Apache-2.0») не трогаем: там нет Osmosy после «Адаптация».
-    our_adaptation = re.compile(r'Адаптация.{0,160}?Osmosy.{0,60}?(MIT|Apache-2\.0|GPL[\w.\-]*)', re.S)
+    #
+    #    Англоязычная ветка — из реального дефекта 29.08.2026: в
+    #    legal-clinic/CLAUDE.md стояло «(adaptation of commercial-legal/CLAUDE.md,
+    #    Apache-2.0)». Русская регулярка не ловила такую строку ни по языку, ни по
+    #    якорю Osmosy, поэтому Apache-2.0 апстрима жил как «лицензия адаптации».
+    #    Признак адаптации: «adaptation/adapted ... of|from ... <лицензия>», где
+    #    источник — наш же домен/шаблон (в CFL-оригиналах атрибуция Anthropic идёт
+    #    по «© Anthropic», такие строки не трогаем).
+    adaptation_patterns = (
+        re.compile(r'Адаптация.{0,160}?Osmosy.{0,60}?(MIT|Apache-2\.0|GPL[\w.\-]*)', re.S),
+        re.compile(r'adapt(?:ation|ed)\b.{0,120}?\b(?:of|from)\b.{0,80}?'
+                   r'(?:legal|hub|student|clinic|CFL).{0,60}?'
+                   r'(MIT|Apache-2\.0|GPL[\w.\-]*)', re.I | re.S),
+    )
     for md_path in sorted(root.rglob('*.md')):
         if '.git' in md_path.parts or 'node_modules' in md_path.parts:
             continue
@@ -395,11 +414,18 @@ def check_claims(root: pathlib.Path) -> List[str]:
         if rel.startswith('skills/'):
             continue  # legacy cowork-roles — EN-оригиналы без нашей атрибуции
         flat = re.sub(r'\s+', ' ', md_path.read_text(encoding='utf-8'))
-        for m in our_adaptation.finditer(flat):
-            declared = m.group(1)
-            if actual_license == 'MIT' and 'MIT' not in declared.upper():
-                errors.append(
-                    f'{rel}: «Адаптация … Osmosy … {declared}», а LICENSE — MIT')
+        for pattern in adaptation_patterns:
+            for m in pattern.finditer(flat):
+                declared = m.group(1)
+                # Цитата в «ёлочках» — отчёт о дефекте или пример, а не
+                # утверждение репозитория о своей лицензии (то же правило, что
+                # для provenance-тегов и [PLACEHOLDER]).
+                if _inside_quotes(flat, m.start()):
+                    continue
+                if actual_license == 'MIT' and 'MIT' not in declared.upper():
+                    errors.append(
+                        f'{rel}: «Адаптация … {declared}», а LICENSE — MIT')
+                    break
 
     errors.extend(check_domain_readmes(root))
     errors.extend(check_links(root))
