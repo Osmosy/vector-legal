@@ -17,6 +17,8 @@ import tempfile
 import textwrap
 import zipfile
 
+import yaml
+
 VALIDATE = pathlib.Path(__file__).resolve().parent.parent / 'scripts' / 'validate.py'
 
 
@@ -607,6 +609,37 @@ def main() -> int:
         results.append(not bad)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+    # 6o. V1 (27.09.2026): скрипт сверки живых задач со спеками ловит diff.
+    #     Проверяем на line_diff — файл jobs.json вне репозитория, в CI его нет.
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent / 'scripts'))
+    import cron_sync_check as csc  # noqa: E402
+    sp = ('1. Срок уведомления 30 дней (ст. 36 ФЗ-14) '
+          '[settled — подтверждено 2026-09-27, КонсультантПлюс].\n'
+          '2. Общий пункт без нормы, но достаточно длинный для значимой строки.')
+    lv = ('1. Срок уведомления 60 дней (ст. 99 ФЗ-14) [model knowledge — verify].\n'
+          '2. Общий пункт без нормы, но достаточно длинный для значимой строки.')
+    only_spec, only_live = csc.line_diff(sp, lv)
+    same = csc.line_diff(sp, sp) == ([], [])
+    bad = not (only_spec and only_live and same)
+    print(('FAIL  ' if bad else 'ok    ') + 'V1: скрипт сверки ловит расхождение промптов')
+    results.append(not bad)
+
+    # 6p. V2: ст. 610 ГК в спеке renewal-watcher — только для аренды на
+    #     неопределённый срок (иначе агент применит сроки 1/3 мес к срочной
+    #     аренде); ст. 429.1 не подаётся как норма о сроке уведомления.
+    spec_path = pathlib.Path(__file__).resolve().parent.parent / 'cookbooks' / 'renewal-watcher' / 'cron-spec.yaml'
+    if spec_path.is_file():
+        body = yaml.safe_load(spec_path.read_text(encoding='utf-8'))['prompt']
+        ok = ('НЕОПРЕДЕЛЁННЫЙ' in body
+              and 'Для срочной аренды эти сроки НЕ применяются' in body
+              and 'срока уведомления НЕ устанавливает' in body)
+        print(('FAIL  ' if not ok else 'ok    ')
+              + 'V2: ст. 610 — условие о неопределённом сроке, ст. 429.1 — без срока')
+        results.append(ok)
+    else:
+        print('skip  V2: спека renewal-watcher не найдена')
+        results.append(True)
 
     ok = sum(results)
     print(f'\n{ok}/{len(results)} тестов прошло')
