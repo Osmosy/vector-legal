@@ -41,7 +41,7 @@ deliver: "origin"                        # вывод сохраняется л�
                                          # telegram по handoff_request
 
 verification:
-  acceptance: "digest-файл в ~/.hermes/legal/regulatory-legal/outputs/ с секциями [Summary stats, Reviewer note, таблица, decision tree]; минимум 1 источник с provenance-тегом"
+  acceptance: "digest-файл out/reg-monitor/<date>.md с секциями с секциями [Summary stats, Reviewer note, таблица, decision tree]; минимум 1 источник с provenance-тегом"
   method: "schema_check"
 escalation:
   on_ambiguous: "challenge_delegator"   # в output-ноте, не в молчаливом пропуске

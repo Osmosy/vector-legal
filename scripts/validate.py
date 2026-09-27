@@ -231,7 +231,7 @@ def norm_with_fact(body: str, paragraph: bool = False) -> bool:
     if not paragraph:
         return False
     unit = re.compile(r'\n(?=\s*(?:[-*+]|\d+[.)])\s)')
-    for para in unit.split(body):
+    for para in _split_units(body):
         if not re.search(NORM_RE, para):
             continue
         flat = re.sub(r'\s+', ' ', para)
@@ -251,10 +251,34 @@ def provenance_issues(body: str, whole: str, label: str = 'SKILL.md',
     таблицах и в списках красных флагов, а тег ставится рядом с утверждением.
     `paragraph=True` дополнительно склеивает пункт, разбитый переносом строки
     (у справочников норма и последствие часто стоят на соседних строках).
+
+    `local_tag=True` (задача L5, 27.09.2026) сужает область тега до пункта,
+    которому он принадлежит. Было: тег искался по всему файлу, поэтому один
+    тег в начале снимал требование со всех утверждений ниже — проверка
+    создавала ложное ощущение надёжности. Проверено на дереве: тег вверху
+    файла закрывал утверждение «24/72 ч (ч. 3.1 ст. 21)» в конце.
     """
+    if paragraph and whole is body:
+        # ищем тег в пределах того пункта, где стоит утверждение
+        for unit in _split_units(body):
+            if not norm_with_fact(unit, paragraph=True):
+                continue
+            if not PROVENANCE_TAGS_RE.search(unit):
+                return [f'advisory: no provenance-tag found while referencing norms/sources ({label})']
+        return []
     if norm_with_fact(body, paragraph=paragraph) and not PROVENANCE_TAGS_RE.search(whole):
         return [f'advisory: no provenance-tag found while referencing norms/sources ({label})']
     return []
+
+
+def _split_units(body: str) -> List[str]:
+    """Пункты текста: единица = абзац или элемент списка.
+
+    Нужна для проверки тега «рядом с утверждением»: тег ищется там же, где
+    стоит норма, а не где угодно в файле (задача L5).
+    """
+    unit = re.compile(r'\n(?=\s*(?:[-*+]|\d+[.)])\s)')
+    return [u for u in unit.split(body) if u.strip()]
 
 
 # --- проверка заявлений о составе и лицензии (--claims) -----------------------
@@ -677,6 +701,41 @@ def validate_all() -> int:
         issues = provenance_issues(text, text, label=ref.name, paragraph=True)
         if issues:
             all_errors.append((rel, [i.replace('advisory: ', 'ERROR: ') for i in issues]))
+
+    # Provenance в промптах cron-спек (`cookbooks/*/cron-spec.yaml`).
+    # Задача L1 плана 27.09.2026: промпт cron-агента — такой же правовой
+    # источник для агента, как SKILL.md, и ошибается так же тихо. Живой пример:
+    # в промпт renewal-watcher была вписана ст. 36 ФЗ-14 (30 дней) как «срок
+    # уведомления о расторжении», тогда как она — про созыв общего собрания;
+    # ошибку поймал сам агент на первом прогоне, а валидатор такое не видел.
+    # Проверяем текст `prompt` каждой спеки как обычный правовой текст.
+    specs_checked = 0
+    for spec_path in sorted(root.glob('cookbooks/*/cron-spec.yaml')):
+        rel = str(spec_path.relative_to(root))
+        try:
+            spec = yaml.safe_load(spec_path.read_text(encoding='utf-8')) or {}
+        except yaml.YAMLError as e:
+            all_errors.append((rel, [f'ERROR: cron-spec.yaml не парсится: {e}']))
+            continue
+        prompts = [spec.get('prompt') or '']
+        # путь приёмки обязан совпадать с путём отчёта в промпте (задача L2)
+        accept = ((spec.get('verification') or {}).get('acceptance') or '')
+        if accept:
+            prompts.append(accept)
+        text = '\n'.join(prompts)
+        if not text.strip():
+            continue
+        specs_checked += 1
+        issues = provenance_issues(text, text, label=spec_path.name, paragraph=True)
+        if issues:
+            all_errors.append((rel, [i.replace('advisory: ', 'ERROR: ') for i in issues]))
+        # Расхождение путей: приёмка указывает в outputs/, промпт — в out/
+        m_accept = re.search(r'(~?[\w./~-]*outputs/[\w./<>-]*)', accept)
+        m_prompt = re.search(r'(out/[\w-]+/<?date>?)', spec.get('prompt') or '')
+        if m_accept and m_prompt:
+            all_errors.append((rel, [
+                f'ERROR: путь приёмки «{m_accept.group(1)}» не совпадает с путём '
+                f'отчёта в промпте «{m_prompt.group(1)}» (задача L2)']))
 
     print(f'=== Vector Legal validation ===')
     print(f'  SKILL.md total: {total}')
