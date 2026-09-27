@@ -39,7 +39,8 @@ def make_repo(tmp: pathlib.Path, *, skills: int = 3, readme: str = '', agents: s
         d = tmp / 'demo-legal' / 'skills' / f'skill-{i}'
         d.mkdir(parents=True, exist_ok=True)
         (d / 'SKILL.md').write_text(
-            '---\nname: skill-%d\ndescription: demo\n---\n\n' % i + skill_body, encoding='utf-8')
+            '---\nname: skill-%d\ndescription: demo\nargument-hint: "[демо]"\n---\n\n' % i + skill_body,
+            encoding='utf-8')
     # skills/ (legacy) — тоже считается в общее число, как в реальном репо
     legacy = tmp / 'skills' / 'demo' / 'legacy'
     legacy.mkdir(parents=True, exist_ok=True)
@@ -319,6 +320,82 @@ def main() -> int:
                            cwd=tmp, capture_output=True, text=True)
         bad = r.returncode != 1 or '!= каталог' not in r.stdout
         print(('FAIL  ' if bad else 'ok    ') + 'name во фронтматтере ≠ каталогу — ошибка')
+        results.append(not bad)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+    # Разбор advisories 27.09.2026: три класса ложного шума. Проверки должны
+    # молчать на корректном дереве и ловить настоящий дефект.
+
+    def _warn_repo(skill_body: str, skill_fm: str = '') -> tuple[str, int]:
+        tmp = pathlib.Path(tempfile.mkdtemp())
+        try:
+            make_repo(tmp, readme=GOOD_README, skill_body=skill_body)
+            if skill_fm:
+                p = tmp / 'demo-legal' / 'skills' / 'skill-0' / 'SKILL.md'
+                p.write_text(p.read_text(encoding='utf-8').replace('description: demo', skill_fm),
+                             encoding='utf-8')
+            r = subprocess.run([sys.executable, str(tmp / 'scripts' / 'validate.py'), '--warnings'],
+                               cwd=tmp, capture_output=True, text=True)
+            return r.stdout, r.returncode
+        finally:
+            shutil.rmtree(tmp, ignore_errors=True)
+
+    # 1. Тег [settled — подтверждено ДАТА] (формат из AGENTS.md) признаётся тегом.
+    out, _ = _warn_repo('Срок — 10 рабочих дней (ст. 20 152-ФЗ) '
+                        '`[settled — подтверждено 2026-09-27, КонсультантПлюс]`\n')
+    bad = 'no provenance-tag' in out
+    print(('FAIL  ' if bad else 'ok    ') + '[settled — подтверждено ДАТА] = валидный тег')
+    results.append(not bad)
+
+    # 2. Ссылка-ориентир на статью без числа тега не требует.
+    out, _ = _warn_repo('Проверить по ст. 15 ГК и ст. 393 ГК: основания и последствия.\n')
+    bad = 'no provenance-tag' in out
+    print(('FAIL  ' if bad else 'ok    ') + 'ссылка на статью без факта — тег не требуется')
+    results.append(not bad)
+
+    # 3. Норма с конкретным числом без тега — предупреждение остаётся.
+    out, _ = _warn_repo('Срок ответа — 10 рабочих дней (ст. 20 152-ФЗ), продление до 5.\n')
+    bad = 'no provenance-tag' not in out
+    print(('FAIL  ' if bad else 'ok    ') + 'норма с числом без тега — предупреждение')
+    results.append(not bad)
+
+    # 4. Упоминание маркера [PLACEHOLDER] в инструкции — не дефект.
+    out, _ = _warn_repo('Если профиль содержит [PLACEHOLDER] — остановиться и сказать об этом.\n')
+    bad = '[PLACEHOLDER] в SKILL.md' in out
+    print(('FAIL  ' if bad else 'ok    ') + 'упоминание [PLACEHOLDER] в инструкции — не дефект')
+    results.append(not bad)
+
+    # 5. Незаполненный маркер в выдаваемом тексте — дефект.
+    out, _ = _warn_repo('Резолюция: [PLACEHOLDER — заполнить содержание обсуждения]\n')
+    bad = '[PLACEHOLDER] в SKILL.md' not in out
+    print(('FAIL  ' if bad else 'ok    ') + 'незаполненный [PLACEHOLDER] — предупреждение')
+    results.append(not bad)
+
+    # 5b. Пример речи пользователя в «ёлочках» — не утверждение репозитория.
+    out, _ = _warn_repo('Пользователь говорит «порог 6 млн», «по ст. 14.3 КоАП столько-то» —\n'
+                        'сверить перед записью.\n')
+    bad = 'no provenance-tag' in out
+    print(('FAIL  ' if bad else 'ok    ') + 'пример речи в «ёлочках» — тег не требуется')
+    results.append(not bad)
+
+    # 6. argument-hint нужен вызываемым навыкам, но не reference-навыкам.
+    out, _ = _warn_repo('тело про ревизию договора\n', skill_fm='description: demo\nuser-invocable: false')
+    bad = 'missing argument-hint' in out
+    print(('FAIL  ' if bad else 'ok    ') + 'user-invocable: false — argument-hint не требуется')
+    results.append(not bad)
+
+    # 6b. Тот же навык, но argument-hint убран — предупреждение возвращается.
+    tmp = pathlib.Path(tempfile.mkdtemp())
+    try:
+        make_repo(tmp, readme=GOOD_README, skill_body='тело про ревизию договора\n')
+        p = tmp / 'demo-legal' / 'skills' / 'skill-0' / 'SKILL.md'
+        p.write_text(p.read_text(encoding='utf-8').replace('argument-hint: "[демо]"\n', ''),
+                     encoding='utf-8')
+        r = subprocess.run([sys.executable, str(tmp / 'scripts' / 'validate.py'), '--warnings'],
+                           cwd=tmp, capture_output=True, text=True)
+        bad = 'missing argument-hint' not in r.stdout
+        print(('FAIL  ' if bad else 'ok    ') + 'hint убран у вызываемого навыка — предупреждение')
         results.append(not bad)
     finally:
         shutil.rmtree(tmp, ignore_errors=True)

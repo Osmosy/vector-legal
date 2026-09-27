@@ -13,6 +13,7 @@ metadata:
     position: 1
     purpose: pre-transaction due diligence
     complements: cowork-legal-vendor-check (post-transaction agreement status)
+argument-hint: '[контрагент: название или ИНН; глубина express|standard|full]'
 ---
 
 # Vector Check — комплексная проверка контрагента (Due Diligence)
