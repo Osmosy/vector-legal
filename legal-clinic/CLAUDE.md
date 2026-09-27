@@ -110,4 +110,5 @@ confirm_routing: true
 ---
 
 *Перезапуск: `cold-start-interview --redo`. Шаблон по умолчанию
-(adaptation of commercial-legal/CLAUDE.md, Apache-2.0).*
+(адаптация `commercial-legal/CLAUDE.md` того же репозитория; адаптация под право
+РФ и Hermes Agent © Osmosy, MIT — см. LICENSE).*
