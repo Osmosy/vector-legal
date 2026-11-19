@@ -9,9 +9,9 @@
 
 | Блок | Содержимое | Вывод |
 |---|---|---|
-| **MCP** | одна строка «None — Use this jurisdiction's Search URL for web searches» | своего РФ-MCP у z.ai нет; MCP-серверы есть для 36 других юрисдикций |
+| **MCP** | одна строка «None — Use this jurisdiction's Search URL for web searches» | своего РФ-MCP у z.ai нет; реальные MCP-серверы на странице указаны только у 5 разделов из 36 (Global — 4, US — 1, EU — 1, Japan — 1, Hong Kong — 1), у остальных «None» |
 | **Search URL** | 7 адресов: pravo.gov.ru, publication.pravo.gov.ru, kremlin.ru/acts/bank, government.ru/docs, pravo-minjust.ru, ksrf.ru, vsrf.ru/documents | забраны в `legal-research-ru` и `CONNECTORS-ru-mcp.md` |
-| **Skills** | 29 навыков, один generic-набор для всех стран; архивов в разделе Russia 37 (29 общих + 8 страновых: us-federal, eu-official, jp-egov, hk-official в двух вариантах) | РФ-специфики в навыках нет |
+| **Skills** | 29 навыков в таблице раздела Russia; набор один и тот же для всех стран (всего на странице 37 уникальных архивов — включая страновые для US/EU/JP/HK) | РФ-специфики в навыках нет |
 | **legal-dxe** | общий (не РФ) remote MCP для правки DOCX, 9 инструментов `dxe_*` | опциональный коннектор, описан в `CONNECTORS-ru-mcp.md` |
 
 ## 2. Лицензия архивов — проверена фактически
