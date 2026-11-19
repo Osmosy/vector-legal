@@ -6,12 +6,12 @@
 
 [![Ecosystem: Vector](https://img.shields.io/badge/Ecosystem-Vector-blue.svg)](https://osmosy.github.io/)
 
-**Юридический AI-департамент для Hermes Agent — 12 плагинов, 168 навыков,
+**Юридический AI-департамент для Hermes Agent — 12 плагинов, 170 навыков,
 полный перенос Claude-for-Legal под российское право.**
 
 [![Hermes Agent](https://img.shields.io/badge/Hermes-Agent-blue.svg)](https://github.com/NousResearch/hermes-agent)
 [![Plugins: 12/12](https://img.shields.io/badge/Plugins-12%2F12-green.svg)](#домены)
-[![Skills: 168](https://img.shields.io/badge/Skills-168-blue.svg)]()
+[![Skills: 170](https://img.shields.io/badge/Skills-170-blue.svg)]()
 [![License: Apache 2.0](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 </div>
@@ -46,7 +46,7 @@ Cron-агенты мониторинга (cookbooks/) шипятся с 4-шлю
 **[Живая интерактивная диаграмма →](https://osmosy.github.io/vector-legal/docs/vector-legal.architecture.html)**
 
 **[Простыми словами: что такое Vector Legal →](docs/essay-plain-ru.md)** — объяснение без юридического и технического жаргона.
-12 плагинов, 168 навыков, practice profiles, MCP-коннекторы к РФ-базам,
+12 плагинов, 170 навыков, practice profiles, MCP-коннекторы к РФ-базам,
 consequential gates. Поиск узлов (`/`), трассировка маршрутов (`R`),
 сравнение ролей (`L`), light/dark. Источник —
 [docs/vector-legal.architecture.json](docs/vector-legal.architecture.json),
