@@ -79,15 +79,16 @@ documents». Это тот же смысл, что у нас. Отдельног
 | `general-legal-risk-assessment` | Покрыто `legal-risk-assessment` | — |
 | `legal-analysis-memo` | Отчёт `legal-research-ru` (Шаг 4) уже даёт структуру мемо | `legal-research-ru` |
 | `legal-research-drafting` | Покрыто `legal-research-ru` + `brief-section-drafter` | — |
-| `argument-chain-construction`, `argument-strength-evaluation`, `legal-interpretation-argument` | Один навык «позиция и контраргументы» — **отложен**, писать после обкатки двух новых | `litigation-legal/skills/argument-builder` (план) |
-| `dispute-issue-identification`, `element-analysis`, `legal-element-extraction` | Один навык «предмет доказывания / элементы состава» — **отложен** | `litigation-legal/skills/issue-elements` (план) |
-| `evidence-evaluation` | Оценка доказательств — **отложен**, покрывается частично `claim-chart` и `chronology` | `litigation-legal/skills/evidence-review` (план) |
+| `argument-chain-construction`, `argument-strength-evaluation`, `legal-interpretation-argument` | Один навык «позиция и контраргументы» — **написан** 19.11.2026 | `litigation-legal/skills/argument-builder` ✅ |
+| `dispute-issue-identification`, `element-analysis`, `legal-element-extraction` | Один навык «предмет доказывания / элементы состава» — **написан** 19.11.2026 | `litigation-legal/skills/issue-elements` ✅ |
+| `evidence-evaluation` | Оценка доказательств — **написан** 19.11.2026 (относимость, допустимость, достоверность, достаточность) | `litigation-legal/skills/evidence-review` ✅ |
 | `legal-document-summarization`, `multi-document-summarization` | Не отдельные навыки: общая способность модели; при необходимости — режим в `matter-briefing` | — |
 | `legal-docx` | Не нужен: создание .docx — runtime-задача (`python-docx`, `soffice`) | — |
 | `legal-docx-revisor` | Только как коннектор `legal-dxe`, не как навык | `CONNECTORS-ru-mcp.md` |
 
-Итог: два навыка написаны (норма и обезличивание), три отложены до обкатки,
-тринадцать закрыты существующими или признаны ненужными.
+Итог: пять навыков написаны (норма, обезличивание, позиция и контраргументы,
+предмет доказывания, оценка доказательств), десять закрыты существующими или
+признаны ненужными.
 
 ## 6. Правило на будущее
 
