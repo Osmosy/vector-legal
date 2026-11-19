@@ -15,7 +15,9 @@ prompt: |
   
   1. Прочитай practice profile: ~/.hermes/legal/regulatory-legal/CLAUDE.md — оттуда берёшь watchlist регуляторов (ФАС, РКН, ФНС, ФСТЭК, ЦБ, Минпромторг, Россельхознадзор, Минцифры), materiality-threshold и категории дел. Если файла нет — работай на generic-дефолтах и пометь весь digest как [PROVISIONAL].
   
-  2. Просканируй источники через web_search и web_extract: pravo.gov.ru (новые НПА, изменения в 152-ФЗ, ГК, ТК, КоАП), regulation.gov.ru (открытые обсуждения), сайты регуляторов из watchlist. КАЖДЫЙ пункт — с provenance-тегом: [pravo.gov.ru] / [regulation.gov.ru] / [model knowledge — verify]. Тег описывает происхождение факта, не уверенность в нём.
+  2. Просканируй источники через web_search и web_extract: pravo.gov.ru (новые НПА, изменения в 152-ФЗ, ГК, ТК, КоАП), publication.pravo.gov.ru (официальное опубликование: только размещённый текст считается официальным — п. 12 Указа Президента № 763 от 23.05.1996), government.ru/docs (постановления и распоряжения Правительства), regulation.gov.ru (открытые обсуждения), сайты регуляторов из watchlist. КАЖДЫЙ пункт — с provenance-тегом: [pravo.gov.ru] / [publication.pravo.gov.ru] / [government.ru] / [regulation.gov.ru] / [model knowledge — verify]. Тег описывает происхождение факта, не уверенность в нём.
+  
+  ДОСТУПНОСТЬ ИСТОЧНИКОВ (проверено 19.11.2026): pravo.gov.ru отвечает по http, по https висит — открывай http и не трать попытки на https. publication.pravo.gov.ru отдаёт карточку и PDF; часть PDF — сканы без текстового слоя: тогда фиксируй «опубликовано, текст не извлекается» и НЕ выводи содержание по названию. pravo-minjust.ru в мониторинг НЕ включён: с рабочей машины он часто не отвечает, будут ложные «недоступно»; ведомственные акты бери с publication.pravo.gov.ru.
   
   3. Фильтруй по материальности из профиля. «Информационное» не равно «нематериальное»: каждому пункту присваивай informational / needs-review / urgent.
   
