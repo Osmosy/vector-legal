@@ -169,3 +169,5 @@ argument-hint: '[--redo | --check-integrations]'
 
 - Не заполняет профиль за юриста выдуманными позициями.
 - Не пишет персональные данные работников в конфиг.
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

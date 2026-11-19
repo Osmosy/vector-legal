@@ -131,3 +131,5 @@ guardrails`, `## Outputs`). Блоки канонизируются там; ес
 2. **Question bank** — полный список вопросов по темам
 3. **[chronology --format=witness-[имя]]** — события, где фигурирует свидетель
 4. **Другое**
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

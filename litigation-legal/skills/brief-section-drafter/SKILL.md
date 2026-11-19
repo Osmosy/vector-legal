@@ -190,3 +190,5 @@ decision tree «Что дальше?» — по формату из practice pro
 2. **[claim-chart]** — сверка таблицы требований с иска
 3. **Подача через «Мой арбитр»** — чеклист (формат PDF/A, подпись УКЭП)
 4. **Другое**
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

@@ -176,3 +176,5 @@ Shared guardrails → Destination check.
 неверной — предложить записать новый паттерн в `## Risk calibration`
 (через `customize`). Каждая «быстрая ответка» — сигнал для обучения
 калибровки.
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

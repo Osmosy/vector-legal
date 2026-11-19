@@ -170,3 +170,5 @@ guardrails`, `## Outputs`). Блоки канонизируются там; ес
 2. **[matter-intake]** — если запрос существенный и/или создаёт дело
 3. **[brief-section-drafter]** — черновик ходатайства об уточнении/возражении
 4. **Другое**
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

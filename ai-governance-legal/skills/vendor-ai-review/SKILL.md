@@ -177,3 +177,5 @@ playbook.
   `commercial-legal / vendor-agreement-review` поверх этого
 - Не оценяет качество модели — только договорные механизмы
 - Не консультирует по зарубежному праву вне EU-модуля
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

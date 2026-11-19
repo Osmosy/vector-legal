@@ -763,9 +763,14 @@ atomno-mcp от 4 900 ₽/мес (5 000 запросов, ~0,98 ₽/запрос
 
 **Осталось.**
 
-- [x] `skills-qa` по двум навыкам — выполнен 19.11.2026, отчёт
-  `docs/skills-qa-2026-11-19.md`: до правок SOME CONCERN (параметры 2, 5, 13),
-  после правок READY.
+- [x] `skills-qa` по пяти навыкам — отчёт `docs/skills-qa-2026-11-19.md`:
+  norm-validity-check и document-anonymize — от SOME CONCERN к READY
+  (параметры 2, 5, 13); argument-builder, issue-elements, evidence-review —
+  READY после добавления полос уверенности.
+- [x] Обкатка на синтетическом деле: issue-elements, evidence-review,
+  argument-builder (взыскание по договору поставки). Внесены два уточнения:
+  отсутствующее доказательство не входит в таблицу; разрыв звена пишется в
+  раздел разбора, а не в колонку контраргумента.
 - [x] Три навыка написаны 19.11.2026: `litigation-legal/skills/argument-builder`,
   `issue-elements`, `evidence-review` (в апстриме прототипов нет). Счётчик 170 → 173.
 - [P2] Решение по `legal-dxe`: подключать или ограничиться локальной правкой

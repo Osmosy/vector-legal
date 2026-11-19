@@ -76,3 +76,5 @@ cold-start интервью и без ручной правки файла.
 - «Playbook: неограниченную ответственность всегда эскалировать» → добавить
   в автоматические эскалации.
 - «Renewal-алерты в Telegram канал @X» → обновить House style.
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

@@ -109,3 +109,5 @@ argument-hint: '[название секции, или опиши, что пом
   `[verify]`, header'ы, consequential gates — load-bearing; объяснить
   trade-off перед снятием.
 - **По одному изменению.** Не пере-спрашивать всё интервью.
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

@@ -41,3 +41,5 @@ re-enable предложить быстрый re-scan свежести (skills-q
 
 > Детальные disable/re-enable workflows — в референс-навыке `skill-manager`
 > — загрузить его перед содержательной работой.
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

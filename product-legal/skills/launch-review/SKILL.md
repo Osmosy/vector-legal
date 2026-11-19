@@ -206,3 +206,5 @@ house-формате. Цель: PM читает и точно знает, что
 - **privacy-policy-ru / terms-of-service-ru** — когда ревью выявляет
   необходимость обновить эти документы (новые ПДн, новая монетизация)
 - **ai-governance-legal** — при детекции ИИ (use-case triage + AIA)
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

@@ -6,7 +6,7 @@
 
 [![Ecosystem: Vector](https://img.shields.io/badge/Ecosystem-Vector-blue.svg)](https://osmosy.github.io/)
 
-**Юридический AI-департамент для Hermes Agent — 12 плагинов, 173 навыков,
+**Юридический AI-департамент для Hermes Agent — 12 плагинов, 173 навыка,
 полный перенос Claude-for-Legal под российское право.**
 
 [![Hermes Agent](https://img.shields.io/badge/Hermes-Agent-blue.svg)](https://github.com/NousResearch/hermes-agent)
@@ -46,7 +46,7 @@ Cron-агенты мониторинга (cookbooks/) шипятся с 4-шлю
 **[Живая интерактивная диаграмма →](https://osmosy.github.io/vector-legal/docs/vector-legal.architecture.html)**
 
 **[Простыми словами: что такое Vector Legal →](docs/essay-plain-ru.md)** — объяснение без юридического и технического жаргона.
-12 плагинов, 173 навыков, practice profiles, MCP-коннекторы к РФ-базам,
+12 плагинов, 173 навыка, practice profiles, MCP-коннекторы к РФ-базам,
 consequential gates. Поиск узлов (`/`), трассировка маршрутов (`R`),
 сравнение ролей (`L`), light/dark. Источник —
 [docs/vector-legal.architecture.json](docs/vector-legal.architecture.json),

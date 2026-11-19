@@ -152,3 +152,5 @@ cross-reference на связанные пункты, которые не мен
 - «Полная ревизия текущей редакции?» → vendor-agreement-review
 - «Саммари изменений для бизнеса?» → stakeholder-summary
 - «Трейс другого пункта?»
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

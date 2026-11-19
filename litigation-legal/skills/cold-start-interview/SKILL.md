@@ -979,3 +979,5 @@ in-house-контуре, а не в solo.
 штатных судов США; litigation hold адаптирован под фиксацию доказательств
 ст. 64 АПК; SOL — СИД по ГК (ст. 195–208); гонорар успеха — по ст. 25
 ФЗ-63; citation-практика — Пленумы ВС и kad.arbitr вместо Bluebook/CourtListener.*
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

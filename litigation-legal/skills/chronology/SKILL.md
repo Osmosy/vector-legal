@@ -158,3 +158,5 @@ Diff-сводка при каждой новой версии. Финальну�
 2. **[brief-section-drafter]** — описательная часть иска/отзыва из sof
 3. **[deposition-prep]** — подготовка к допросу/пояснениям
 4. **Другое**
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

@@ -225,3 +225,5 @@ wage-hour-qa Шаг 3); сроки и место выплаты; индекса�
   если он есть).
 - Не проектирует налоговые схемы «зарплата через договоры ГПХ» —
   `worker-classification` и флаги риска.
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

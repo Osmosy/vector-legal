@@ -175,3 +175,5 @@ guardrails`, `## Outputs`). Блоки канонизируются там; ес
    (ст. 125/126 АПК)
 3. **Ответили → [demand-received]** — триаж ответа
 4. **Другое**
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

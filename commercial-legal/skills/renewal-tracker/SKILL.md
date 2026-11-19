@@ -137,3 +137,5 @@ provided]», «[verified — подтверждено YYYY-MM-DD]».
 При подключённом ЭДО (Диадок/СБИС): если вендорский договор уже на ЭДО —
 offer bulk-load. Если Telegram подключён — алерты идут туда (в канал из
 House style → Renewal alerts).
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

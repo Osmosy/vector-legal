@@ -250,3 +250,5 @@ Cite primary sources. Verify currency — поправки идут пакета
   (доступен отдельно, когда regulatory-legal готов); навык работает по
   конкретному уже известному изменению.
 - **Не подаёт уведомления РКН** — готовит черновики и флагает.
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

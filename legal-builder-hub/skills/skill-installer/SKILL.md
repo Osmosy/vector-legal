@@ -529,3 +529,5 @@ auto-updater знать, когда есть более новая версия.
   источника (license-поле, LICENSE-файл, frontmatter).
 - Не ветчит навыки на юридическую точность — это substance review, а не
   этот навык.
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

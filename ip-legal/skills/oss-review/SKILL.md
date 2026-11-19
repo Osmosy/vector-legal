@@ -205,3 +205,5 @@ Reviewer note (источники лицензий!) + decision tree:
 
 Не проверяет безопасность пакетов (CVE — не здесь), не заменяет SBOM-
 инструменты; лицензии — только по тексту в этой сессии или `[user provided]`.
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

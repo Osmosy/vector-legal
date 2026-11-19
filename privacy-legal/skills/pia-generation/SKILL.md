@@ -362,3 +362,5 @@ seed-оценки при cold-start заменит дефолт.
   `use-case-triage`, добавить обработку в перечень practice profile (если
   юрист подтверждает), а при новой/изменённой обработке у поручителя —
   `dpa-review` для проверки поручения (ст. 6 ч. 3 152-ФЗ).
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

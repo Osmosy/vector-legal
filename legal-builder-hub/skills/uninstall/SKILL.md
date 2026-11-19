@@ -48,3 +48,5 @@ argument-hint: '[имя навыка]'
 
 > Детальные uninstall/disable/re-enable workflows — в референс-навыке
 > `skill-manager` — загрузить его перед содержательной работой.
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

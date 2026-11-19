@@ -160,3 +160,5 @@ Severity × likelihood по профилю; экспозиция; встречн
 3. **Связать с существующим делом** — обновить related_matters
 4. **Holding letter сейчас** — короткий драфт
 5. **Другое**
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

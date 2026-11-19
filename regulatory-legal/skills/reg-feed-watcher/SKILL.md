@@ -172,3 +172,5 @@ Decision tree: 1. **Разобрать [акт]** → policy-diff · 2. **Ком
 Не даёт правовой оценки актов (только сигнал + релевантность), не строит
 gap-анализ (это policy-diff), не подменяет проверку реквизитов по
 pravo.gov.ru.
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

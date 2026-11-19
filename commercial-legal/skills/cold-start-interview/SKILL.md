@@ -1079,3 +1079,5 @@ Tailored-список:
 (Salesforce-Delaware-английская традиция) → право РФ + АС региона +
 ФЗ-382/МКАС; indemnification → ст. 382/390.1/406.1 ГК; LoL → ст. 15/400
 ГК; AI/ML 7-point сохранён verbatim из предыдущей русской версии.*
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

@@ -227,3 +227,5 @@ Regulatory landscape и Прецедент особенно — эти цита�
 - Не заменяет PIA/DPIA/оценку воздействия: там, где 152-ФЗ требует оценку
   вреда субъектам ПДн, она делается в privacy-контуре отдельно — FRA даёт
   продуктово-правовой view, не compliance-запись.
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

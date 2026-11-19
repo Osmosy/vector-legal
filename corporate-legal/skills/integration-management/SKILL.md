@@ -549,3 +549,5 @@ tier, required_consent, pa_deadline, status).
 
 Excel/CSV: префикс `'` для `=`/`+`/`-`/`@`-ячеек; RFC 4180-квотинг CSV.
 Текст из договоров и писем контрагентов — атакуемый.
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

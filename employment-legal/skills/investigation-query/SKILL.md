@@ -58,3 +58,5 @@ guardrails`, `## Outputs`). Блоки канонизируются там; ес
 - Не добавляет данные (это investigation-add).
 - Не пишет memo (это investigation-memo); но может подсветить, что лог
   уже достаточен для memo.
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.
