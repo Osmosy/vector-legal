@@ -61,3 +61,5 @@ guardrails`, `## Outputs`). Блоки канонизируются там; ес
 - Не создаёт memo (investigation-memo).
 - Не рассылает ничего — только готовит документ и показывает риски
   канала.
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

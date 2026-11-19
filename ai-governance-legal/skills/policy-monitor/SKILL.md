@@ -148,3 +148,5 @@ reg-gap-analysis для нового НПА / юрист для решения]
 
 Reviewer note (один блок) + decision tree «Что дальше?» — по формату из
 practice profile.
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

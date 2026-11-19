@@ -107,3 +107,5 @@ Issue: §8.2 indemnity carveouts
 По профилю (`House style → Эскалации → канал`): Telegram через Hermes gateway
 (алерты), email (формальные эскалации), или inline показ. Без явного
 「отправь」— показ и ждать.
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

@@ -205,3 +205,5 @@ RF-контур (см. ниже) определяет требования. Ес
 **Reviewer note:** каждый выход сопровождать блоком
 `⚠️ Reviewer note` по формату practice profile (источники, покрытие,
 флаги `[verify]`, перед опорой на вывод).
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

@@ -64,3 +64,5 @@ argument-hint: '[имя секции или описание изменения]
   policy-diff/policy-redraft начнут читать оттуда
 - «Дайджест — по понедельникам» → обновить feed config cadence; напомнить
   про cron (если ✗ — не придут автоматически)
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

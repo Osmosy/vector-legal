@@ -139,3 +139,5 @@ decision tree «Что дальше?» — по формату из practice pro
 2. **Эскалировать аномалии** — письма руководству юр.
 3. **[portfolio-status]** — свёлка картотеки с бюджетным срезом
 4. **Другое**
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

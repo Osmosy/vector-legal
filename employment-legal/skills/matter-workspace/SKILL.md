@@ -107,3 +107,5 @@ argument-hint: '<new | list | switch | close | none> [slug]'
 
 - Не переписывает practice profile — только флаг активного дела.
 - Не удаляет файлы закрытых дел (архив, не удаление).
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

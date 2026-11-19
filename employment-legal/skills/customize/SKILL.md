@@ -61,3 +61,5 @@ argument-hint: '[название секции, или опиши изменен
 
 - Не переинтервьюирует — для этого `cold-start-interview --redo`.
 - Не меняет форматные каноны плагина.
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

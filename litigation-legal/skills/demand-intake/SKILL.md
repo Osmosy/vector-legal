@@ -150,3 +150,5 @@ guardrails`, `## Outputs`). Блоки канонизируются там; ес
 1. **[demand-draft [slug]]** — черновик претензии
 2. **[claim-chart]** — если нужна оценка перспектив иска перед претензией
 3. **Другое**
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

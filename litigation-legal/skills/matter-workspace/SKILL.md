@@ -64,3 +64,5 @@ Note: `/matter-briefing [slug]` — отдельная команда-брифи
 
 После создания пространства — предложить `/matter-intake` для полного
 intake (риск-триаж, материальность, _log.yaml-строка).
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

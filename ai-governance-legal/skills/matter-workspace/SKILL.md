@@ -66,3 +66,5 @@ argument-hint: '<new | list | switch | close | none> [slug]'
 
 **Дефолт — выключено.** In-house пользователи никогда не видят это;
 пространства включаются на cold-start для частной практики.
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

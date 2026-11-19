@@ -87,3 +87,5 @@ In-house с одним клиентом: `Enabled: ✗`, practice-level авто
 создавать пустые каталоги, не спрашивать о matter'ах на каждом шаге — если
 настройка выключена, это ожидаемо. При in-house запускать `/matter-workspace`
 нет причины; это не ошибка, а нормальная жизнь плагина.
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

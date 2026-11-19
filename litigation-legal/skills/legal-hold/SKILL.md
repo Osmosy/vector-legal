@@ -128,3 +128,5 @@ guardrails`, `## Outputs`). Блоки канонизируются там; ес
 2. **Заявление об обеспечительных мерах** (ст. 90 АПК) → brief-section-drafter
 3. **[matter-update]** — залогировать выданный hold
 4. **Другое**
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

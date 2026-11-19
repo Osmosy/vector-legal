@@ -201,3 +201,5 @@ eu_nexus. Каждый выход — `[PROVISIONAL — запусти cold-star
 - Не делает выводов по зарубежной юрисдикции без eu_nexus-флага и
   соответствующего фреймворка
 - Не изменяет контракт вендора — это `vendor-ai-review`
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

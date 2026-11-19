@@ -43,3 +43,5 @@ argument-hint: "[--close GAP-ID | --accept GAP-ID]"
 
 **Consequential gate:** close/accept gap'а — подтверждаются явно
 («подтверждаю закрытие GAP-007»), без интерпретации «да» на смежный вопрос.
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

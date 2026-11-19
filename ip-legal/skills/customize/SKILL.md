@@ -95,3 +95,5 @@ argument-hint: '[имя секции или описание изменения]
 При изменении thresholds/политик: одна строка в
 `~/.hermes/legal/ip-legal/verification-log.md` — создаёт paper trail до
 reliance на последующие ревизии.
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

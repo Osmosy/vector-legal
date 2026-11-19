@@ -947,3 +947,5 @@ US (Colorado, BIPA, NIST, state AI laws) заменены на 152-ФЗ/ЭПР �
 (ФЗ-123)/ГОСТ Р 59276-2020/ГОСТ Р ИСО/МЭК 23894/187-ФЗ; EU AI Act остаётся
 для экспортного контура с `[verify]` на даты; shadow-AI discovery сохранён
 на российских примерах; AIA-храусстиль — по practice profile домена.*
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.

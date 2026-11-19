@@ -727,3 +727,5 @@ cold-start.
 Federal Register API; CourtListener не применим — РФ-эквивалент kad.arbitr.ru
 (судебные акты) + web_search; comment tracking — периоды обсуждения на
 regulation.gov.ru; header'ы и gate'ы — по practice profile домена.*
+
+> Адаптировано из anthropics/claude-for-legal (Apache-2.0, Anthropic); изменения — Osmosy.
