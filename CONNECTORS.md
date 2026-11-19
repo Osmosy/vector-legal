@@ -66,6 +66,12 @@
 | kad.arbitr.ru | CourtListener | `[kad.arbitr.ru]` |
 | sudrf.ru | CourtListener (СОЮ) | `[sudrf.ru]` |
 | pravo.gov.ru | Federal Register | `[pravo.gov.ru]` |
+| publication.pravo.gov.ru | Federal Register (официальное опубликование) | `[publication.pravo.gov.ru]` |
+| kremlin.ru/acts/bank | Executive orders (US) | `[kremlin.ru]` |
+| government.ru/docs | Federal Register (акты правительства) | `[government.ru]` |
+| pravo-minjust.ru | — (регистрация ведомственных актов) | `[pravo-minjust.ru]` |
+| ksrf.ru | Supreme Court (конституционный контроль) | `[ksrf.ru]` |
+| vsrf.ru/documents | Supreme Court (Пленумы, обзоры) | `[vsrf.ru]` |
 | КонсультантПлюс (free источники) | Westlaw/Practical Law | `[КонсультантПлюс]` |
 | ЕГРЮЛ | SEC EDGAR | `[egrul.nalog.ru]` |
 | Федресурс | PACER-банкротства | `[fedresurs.ru]` |

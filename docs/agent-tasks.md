@@ -728,3 +728,33 @@ atomno-mcp от 4 900 ₽/мес (5 000 запросов, ~0,98 ₽/запрос
 Замер воспроизводим; если решим править — проверку контраста подзаголовка
 добавить в `check_credit_contrast` рядом с проверкой служебных строк.
 
+## Часть 5. Задача 19.11.2026 — z.ai Legal MCP (раздел 17 Russia)
+
+Исходный план: [`plan-zai-legal-ru.md`](plan-zai-legal-ru.md) (передан владельцем
+19.11.2026). Разбор и решения — [`zai-gap-analysis.md`](zai-gap-analysis.md).
+
+**Сделано 19.11.2026.**
+
+- `legal-research-ru`: шесть официальных порталов с provenance-тегами
+  (publication.pravo.gov.ru, kremlin.ru, government.ru, pravo-minjust.ru,
+  ksrf.ru), уточнён vsrf.ru/documents; два новых шага research loop —
+  регистрация ведомственного акта в Минюсте и проверка конституционности.
+- `CONNECTORS-ru-mcp.md`: раздел «Официальные источники без MCP и без API»
+  (у z.ai нет РФ-сервера — раздел 17, MCP = None) и описание опционального
+  коннектора `legal-dxe` с границами по ПДн.
+- `THIRD_PARTY_NOTICES.md`: апстрим Apache-2.0, 148 из 154 навыков совпадают
+  по пути, формулировка изменений (§4(c)), позиция по z.ai.
+- Новые навыки: `regulatory-legal/skills/norm-validity-check`,
+  `privacy-legal/skills/document-anonymize` (170 навыков в дереве).
+
+**Осталось.**
+
+- [P2] Обкатать `norm-validity-check` и `document-anonymize` на реальной
+  задаче; по результатам — `skills-qa`.
+- [P3] Три отложенных навыка: `argument-builder`, `issue-elements`,
+  `evidence-review` (в апстриме прототипов нет — писать с нуля).
+- [P2] Решение по `legal-dxe`: подключать или ограничиться локальной правкой
+  DOCX. Требует решения владельца по трансграничной передаче (ст. 12 152-ФЗ).
+- [P3] Перенести источники мониторинга в `cookbooks/reg-monitor/cron-spec.yaml`
+  и в живую cron-задачу через `cronjob_manage` (сейчас спека и задача в
+  синхроне, менять нужно обе разом).
