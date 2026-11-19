@@ -6,12 +6,12 @@
 
 [![Ecosystem: Vector](https://img.shields.io/badge/Ecosystem-Vector-blue.svg)](https://osmosy.github.io/)
 
-**Юридический AI-департамент для Hermes Agent — 12 плагинов, 170 навыков,
+**Юридический AI-департамент для Hermes Agent — 12 плагинов, 173 навыков,
 полный перенос Claude-for-Legal под российское право.**
 
 [![Hermes Agent](https://img.shields.io/badge/Hermes-Agent-blue.svg)](https://github.com/NousResearch/hermes-agent)
 [![Plugins: 12/12](https://img.shields.io/badge/Plugins-12%2F12-green.svg)](#домены)
-[![Skills: 170](https://img.shields.io/badge/Skills-170-blue.svg)]()
+[![Skills: 173](https://img.shields.io/badge/Skills-173-blue.svg)]()
 [![License: Apache 2.0](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
 </div>
@@ -46,7 +46,7 @@ Cron-агенты мониторинга (cookbooks/) шипятся с 4-шлю
 **[Живая интерактивная диаграмма →](https://osmosy.github.io/vector-legal/docs/vector-legal.architecture.html)**
 
 **[Простыми словами: что такое Vector Legal →](docs/essay-plain-ru.md)** — объяснение без юридического и технического жаргона.
-12 плагинов, 170 навыков, practice profiles, MCP-коннекторы к РФ-базам,
+12 плагинов, 173 навыков, practice profiles, MCP-коннекторы к РФ-базам,
 consequential gates. Поиск узлов (`/`), трассировка маршрутов (`R`),
 сравнение ролей (`L`), light/dark. Источник —
 [docs/vector-legal.architecture.json](docs/vector-legal.architecture.json),
@@ -60,7 +60,7 @@ consequential gates. Поиск узлов (`/`), трассировка мар�
 | **privacy-legal** | 10 | 152-ФЗ: поручения ст. 6, запросы субъектов 10 рабочих дней, оценка вреда ст. 18.1, ТИПЗ ФСТЭК №21, трансграничка ст. 12+№931, утечки 24/72ч, КоАП 13.11 |
 | **corporate-legal** | 13 | ФЗ-14/208: крупные сделки, протоколы ст. 181.2 ГК, нотариат долей, ЕГРЮЛ-комплаенс |
 | **employment-legal** | 20 | ТК РФ: закрытый перечень ст. 81 (ат-вилл не работает), сокращения, ГПХ-vs-трудовой (Пленум ВС №15), ЛНА |
-| **litigation-legal** | 20 | АПК/ГПК/КАС: досудебный порядок ч. 5 ст. 4, kad.arbitr, сроки 1м/2м/3м, допрос ст. 88, обеспечение ст. 72, **patent-claim-chart** (ГК 1354–1358, СИПН) |
+| **litigation-legal** | 23 | АПК/ГПК/КАС: досудебный порядок ч. 5 ст. 4, kad.arbitr, сроки 1м/2м/3м, допрос ст. 88, обеспечение ст. 72, **patent-claim-chart** (ГК 1354–1358, СИПН) |
 | **ai-governance-legal** | 10 | ЭПР ИИ ФЗ-123 [verify], ГОСТ Р 59276/ИСО 23894, Shadow-AI discovery, EU AI Act для экспорта |
 | **regulatory-legal** | 10 | pravo.gov.ru монитор, гильотина (247-ФЗ ст. 15, ПП № 2467), 44/223-ФЗ, ФАС, отраслевые (Минсельхоз/Россельхознадзор/Минпромторг) |
 | **ip-legal** | 12 | Роспатент/ФИПС, ГК ч. 4 (1354-1407), СИПН, OSS (AGPL-triggers), патентный поверенный обязателен |
