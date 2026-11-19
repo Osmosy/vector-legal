@@ -29,8 +29,10 @@ anthropics/claude-for-legal под российское право. 12 плаг�
 ### 3. Provenance-теги обязательны
 
 Каждая цитата/факт маркируются источником:
-[kad.arbitr.ru] / [pravo.gov.ru] / [ФИПС] / [КонсультантПлюс] /
-[user provided] / [model knowledge — verify] / [web search — verify] /
+[kad.arbitr.ru] / [pravo.gov.ru] / [publication.pravo.gov.ru] / [kremlin.ru] /
+[government.ru] / [pravo-minjust.ru] / [ksrf.ru] / [vsrf.ru] / [sudrf.ru] /
+[ФИПС] / [КонсультантПлюс] / [user provided] /
+[model knowledge — verify] / [web search — verify] /
 [settled — подтверждено YYYY-MM-DD].
 Молчаливое понижение тега = нарушенный контракт. [settled] — только после
 прямой сверки с первоисточником в этой сессии.

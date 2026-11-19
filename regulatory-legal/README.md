@@ -55,6 +55,7 @@ watchlist регуляторов, порог materiality (что «всегда 
 | CFL (US) | Vector Legal (RU) |
 |---|---|
 | Federal Register API | **pravo.gov.ru** — официальный портал НПА (бесплатный; есть публикация проектов на regulation.gov.ru). RSS/API не гарантирован → web_search + тег `[pravo.gov.ru — verify]` |
+| Federal Register (official publication) | **publication.pravo.gov.ru** — дата и номер официального опубликования, момент вступления в силу; **government.ru/docs** — постановления и распоряжения Правительства; **pravo-minjust.ru** — портал НПА Минюста и государственная регистрация ведомственных актов. API нет → web_search + тег по источнику |
 | Regulations.gov docket (комментарии) | **regulation.gov.ru** — публичные обсуждения проектов; дедлайны обсуждений; также порталы субъектов |
 | Paid regulatory feeds (Bloomberg Law и др.) | КонсультантПлюс/Гарант через web_search `[verify]`; официального MCP нет |
 | Agency RSS (FTC, SEC, CFPB…) | Сайты регуляторов: ЦБ (cbr.ru), Минцифры, РКН (rkn.gov.ru), ФСТЭК, Роспотребнадзор, ФАС, Минфин, Минсельхоз; RSS нестабильны → web_search + прямые страницы «новостей» |
